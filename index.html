@@ -269,7 +269,7 @@
       <!-- BOTTOM SECTION: INVESTOR DATA TABLE CARD -->
       <section class="bg-white border border-slate-200 rounded-xl shadow-2xs flex flex-col flex-1 min-h-0 overflow-hidden">
 
-        <!-- Table Toolbar: Search & Download List Only (Sort dropdown removed) -->
+        <!-- Table Toolbar: Search & Download List Only -->
         <div class="px-4 py-2.5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white shrink-0">
           <div class="relative w-full sm:w-72">
             <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
@@ -282,7 +282,13 @@
             />
           </div>
 
-          <div class="flex items-center justify-end">
+          <div class="flex items-center justify-end gap-2">
+            <!-- Mobile Quick Sort Toggle for Withdrawals (only visible on mobile under P2P) -->
+            <button type="button" id="mobileWithdrawalsSortBtn" onclick="toggleWithdrawalsSort()" class="md:hidden px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium text-xs flex items-center gap-1">
+              <span>Withdrawals</span>
+              <span id="mobileSortArrow" class="text-brand-blue font-bold">↑</span>
+            </button>
+
             <button onclick="downloadCurrentTableCSV()" class="px-3.5 py-1.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-medium text-xs flex items-center gap-1.5 shadow-2xs transition">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
               <span id="downloadBtnLabel">Download P2P Edge List</span>
@@ -557,7 +563,7 @@
 
     let currentTab = 'P2P';          // P2P | ESTATES | NCD
     let currentPeriod = 'MTD';       // MTD | 30D | ALL
-    let withdrawalsSortDir = null;   // null | 'desc' | 'asc'
+    let withdrawalsSortDir = 'desc'; // Default High to Low ('desc'), toggles to 'asc' on click
 
     function toggleMobileSidebar(open) {
       const sb = document.getElementById('sidebar');
@@ -592,8 +598,8 @@
 
       return {
         deposit,
-        pulledViaMandate,
         withdrawals,
+        pulledViaMandate,
         currentValue: inv.p2p.currentValue,
         mandateActive: inv.p2p.mandateActive
       };
@@ -627,12 +633,10 @@
     }
 
     function toggleWithdrawalsSort() {
-      if (withdrawalsSortDir === null) {
-        withdrawalsSortDir = 'desc';
-      } else if (withdrawalsSortDir === 'desc') {
-        withdrawalsSortDir = 'asc';
-      } else {
-        withdrawalsSortDir = 'desc';
+      withdrawalsSortDir = withdrawalsSortDir === 'desc' ? 'asc' : 'desc';
+      const mobileArrow = document.getElementById('mobileSortArrow');
+      if (mobileArrow) {
+        mobileArrow.textContent = withdrawalsSortDir === 'desc' ? '↑' : '↓';
       }
       renderTable();
     }
@@ -670,6 +674,11 @@
       };
       document.getElementById('downloadBtnLabel').textContent = downloadLabels[tab];
 
+      const mobileSortBtn = document.getElementById('mobileWithdrawalsSortBtn');
+      if (mobileSortBtn) {
+        mobileSortBtn.style.display = tab === 'P2P' ? 'flex' : 'none';
+      }
+
       renderDashboard();
     }
 
@@ -699,7 +708,7 @@
         return true;
       });
 
-      if (currentTab === 'P2P' && withdrawalsSortDir) {
+      if (currentTab === 'P2P') {
         list.sort((a, b) => {
           const wa = getP2PPeriodMetrics(a).withdrawals;
           const wb = getP2PPeriodMetrics(b).withdrawals;
@@ -719,9 +728,10 @@
         const list = investorsData.filter(i => i.p2p.invested);
         const totalCurrentVal = list.reduce((s, i) => s + getP2PPeriodMetrics(i).currentValue, 0);
         const totalDeposit = list.reduce((s, i) => s + getP2PPeriodMetrics(i).deposit, 0);
-        const totalPulled = list.reduce((s, i) => s + getP2PPeriodMetrics(i).pulledViaMandate, 0);
         const totalWithdrawals = list.reduce((s, i) => s + getP2PPeriodMetrics(i).withdrawals, 0);
+        const totalPulled = list.reduce((s, i) => s + getP2PPeriodMetrics(i).pulledViaMandate, 0);
 
+        // Order: Current Value -> Deposit -> Withdrawals -> Pulled Via Mandate (Withdrawals before Pulled Via Mandate)
         strip.innerHTML = `
           <div class="hero-card-gradient text-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
             <span class="text-xs text-blue-200 font-medium">P2P Current Value</span>
@@ -740,18 +750,18 @@
           </div>
 
           <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
-            <span class="text-xs font-medium text-slate-500">Pulled Via Mandate (${pLabel})</span>
-            <div class="mt-2">
-              <div class="text-lg sm:text-xl font-bold text-brand-blue tabular-nums">${formatINR(totalPulled)}</div>
-              <div class="text-[11px] text-slate-400 mt-0.5">Reinvested via auto-debit mandate</div>
-            </div>
-          </div>
-
-          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
             <span class="text-xs font-medium text-slate-500">Withdrawals (${pLabel})</span>
             <div class="mt-2">
               <div class="text-lg sm:text-xl font-bold text-slate-900 tabular-nums">${formatINR(totalWithdrawals)}</div>
               <div class="text-[11px] text-slate-400 mt-0.5">Repayments credited to bank</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Pulled Via Mandate (${pLabel})</span>
+            <div class="mt-2">
+              <div class="text-lg sm:text-xl font-bold text-brand-blue tabular-nums">${formatINR(totalPulled)}</div>
+              <div class="text-[11px] text-slate-400 mt-0.5">Reinvested via auto-debit mandate</div>
             </div>
           </div>
         `;
@@ -827,7 +837,6 @@
       }
     }
 
-    // On Demand Mandate CTAs: "Pull Now" (when mandate is created/active) and "Create Now" (when mandate is not created)
     function getOnDemandMandateHtml(isActive, investorName) {
       if (isActive) {
         return `
@@ -862,7 +871,7 @@
       emptyState.classList.add('hidden');
 
       // 1. P2P EDGE TABLE
-      // Exact columns in order: User ID, Investor Name, Deposit, Pulled Via Mandate, Withdrawals (with ↑/↓ sort), Current Value, On Demand Mandate
+      // Exact columns in order: User ID, Investor Name, Deposit, Withdrawals ↑, Pulled Via Mandate, Current Value, On Demand Mandate
       if (currentTab === 'P2P') {
         footerNote.innerHTML = `
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -874,24 +883,23 @@
           </div>
         `;
 
-        const sortArrow = withdrawalsSortDir === 'asc'
+        // Default is high-to-low ('desc' -> shows ↑), clicking toggles to low-to-high ('asc' -> shows ↓)
+        const sortArrow = withdrawalsSortDir === 'desc'
           ? '<span class="text-brand-blue font-bold ml-1">↑</span>'
-          : withdrawalsSortDir === 'desc'
-            ? '<span class="text-brand-blue font-bold ml-1">↓</span>'
-            : '<span class="text-slate-400 ml-1">↑↓</span>';
+          : '<span class="text-brand-blue font-bold ml-1">↓</span>';
 
         thead.innerHTML = `
           <tr>
             <th class="py-2.5 pl-4 pr-3 w-[11%]">User ID</th>
             <th class="py-2.5 px-3 w-[20%]">Investor Name</th>
             <th class="py-2.5 px-3 text-right w-[13%]">Deposit</th>
-            <th class="py-2.5 px-3 text-right w-[15%]">Pulled Via Mandate</th>
-            <th class="py-2.5 px-3 text-right w-[13%]">
-              <button type="button" onclick="toggleWithdrawalsSort()" class="inline-flex items-center justify-end gap-0.5 uppercase tracking-wider hover:text-slate-800 transition focus:outline-none">
+            <th class="py-2.5 px-3 text-right w-[14%]">
+              <button type="button" onclick="toggleWithdrawalsSort()" class="inline-flex items-center justify-end gap-0.5 uppercase tracking-wider text-slate-700 hover:text-brand-blue transition focus:outline-none">
                 <span>Withdrawals</span>${sortArrow}
               </button>
             </th>
-            <th class="py-2.5 px-3 text-right w-[14%]">Current Value</th>
+            <th class="py-2.5 px-3 text-right w-[15%]">Pulled Via Mandate</th>
+            <th class="py-2.5 px-3 text-right w-[13%]">Current Value</th>
             <th class="py-2.5 pl-3 pr-4 text-center w-[14%]">On Demand Mandate</th>
           </tr>
         `;
@@ -908,11 +916,11 @@
               <td class="py-3 px-3 text-right font-semibold text-slate-800 whitespace-nowrap">
                 ${formatINR(m.deposit)}
               </td>
-              <td class="py-3 px-3 text-right font-semibold text-slate-800 whitespace-nowrap">
-                ${formatINR(m.pulledViaMandate)}
-              </td>
               <td class="py-3 px-3 text-right font-medium text-slate-700 whitespace-nowrap">
                 ${formatINR(m.withdrawals)}
+              </td>
+              <td class="py-3 px-3 text-right font-semibold text-slate-800 whitespace-nowrap">
+                ${formatINR(m.pulledViaMandate)}
               </td>
               <td class="py-3 px-3 text-right font-bold text-slate-900 whitespace-nowrap">
                 ${formatINR(m.currentValue)}
@@ -943,12 +951,12 @@
                   <span class="font-semibold text-slate-800">${formatINR(m.deposit)}</span>
                 </div>
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Pulled Via Mandate</span>
-                  <span class="font-semibold text-slate-800">${formatINR(m.pulledViaMandate)}</span>
-                </div>
-                <div>
                   <span class="text-[10px] text-slate-400 block">Withdrawals</span>
                   <span class="font-medium text-slate-700">${formatINR(m.withdrawals)}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">Pulled Via Mandate</span>
+                  <span class="font-semibold text-slate-800">${formatINR(m.pulledViaMandate)}</span>
                 </div>
                 <div>
                   <span class="text-[10px] text-slate-400 block">Current Value</span>
@@ -1153,10 +1161,10 @@
       let rows = [];
 
       if (currentTab === 'P2P') {
-        headers = ['User ID', 'Investor Name', 'Deposit', 'Pulled Via Mandate', 'Withdrawals', 'Current Value', 'On Demand Mandate'];
+        headers = ['User ID', 'Investor Name', 'Deposit', 'Withdrawals', 'Pulled Via Mandate', 'Current Value', 'On Demand Mandate'];
         rows = list.map(i => {
           const m = getP2PPeriodMetrics(i);
-          return [i.userId, `"${i.name}"`, m.deposit, m.pulledViaMandate, m.withdrawals, m.currentValue, m.mandateActive ? 'Pull Now' : 'Create Now'];
+          return [i.userId, `"${i.name}"`, m.deposit, m.withdrawals, m.pulledViaMandate, m.currentValue, m.mandateActive ? 'Pull Now' : 'Create Now'];
         });
       } else if (currentTab === 'ESTATES') {
         headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Investor Share', 'Total Share Percentage'];
