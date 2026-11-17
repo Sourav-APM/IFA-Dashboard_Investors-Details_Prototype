@@ -243,7 +243,7 @@
           </div>
         </div>
 
-        <!-- Product Tabs (No counts beside product names, P2P Edge heading) -->
+        <!-- Product Tabs -->
         <section class="bg-white border border-slate-200 rounded-xl px-2 sm:px-4 shadow-2xs">
           <div class="grid grid-cols-3 sm:flex sm:items-center sm:gap-5" id="productTabs">
             <button onclick="switchProductTab('P2P')" data-tab="P2P" class="tab-btn px-2 sm:px-3 py-2.5 text-xs font-semibold border-b-2 border-brand-blue text-brand-blue flex items-center justify-center sm:justify-start transition">
@@ -269,9 +269,9 @@
       <!-- BOTTOM SECTION: INVESTOR DATA TABLE CARD -->
       <section class="bg-white border border-slate-200 rounded-xl shadow-2xs flex flex-col flex-1 min-h-0 overflow-hidden">
 
-        <!-- Table Toolbar: Search, Sort & Download List -->
+        <!-- Table Toolbar: Search & Download List Only (Sort dropdown removed) -->
         <div class="px-4 py-2.5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white shrink-0">
-          <div class="relative w-full sm:w-64">
+          <div class="relative w-full sm:w-72">
             <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input 
               type="text" 
@@ -282,22 +282,15 @@
             />
           </div>
 
-          <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2">
-            <div class="flex items-center gap-1.5 text-xs">
-              <span class="text-slate-400">Sort:</span>
-              <select id="sortSelect" onchange="applyFilters()" class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 font-medium bg-white focus:outline-none focus:border-brand-blue">
-                <!-- Populated per tab -->
-              </select>
-            </div>
-
-            <button onclick="downloadCurrentTableCSV()" class="px-3 py-1.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-medium text-xs flex items-center gap-1.5 shadow-2xs transition">
+          <div class="flex items-center justify-end">
+            <button onclick="downloadCurrentTableCSV()" class="px-3.5 py-1.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-medium text-xs flex items-center gap-1.5 shadow-2xs transition">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
               <span id="downloadBtnLabel">Download P2P Edge List</span>
             </button>
           </div>
         </div>
 
-        <!-- DESKTOP & TABLET STRUCTURED TABLE (Balanced column widths, zero extra whitespace, zero horizontal/vertical scroll) -->
+        <!-- DESKTOP & TABLET STRUCTURED TABLE -->
         <div class="hidden md:block flex-1 overflow-x-auto">
           <table class="w-full table-fixed text-left border-collapse" id="investorTable">
             <thead id="tableHead" class="bg-slate-50/90 border-b border-slate-200 text-[10.5px] font-semibold text-slate-500 uppercase tracking-wider">
@@ -327,11 +320,8 @@
         </div>
 
         <!-- Table Footer -->
-        <div id="tableFooter" class="px-4 py-2 bg-slate-50/80 border-t border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-1.5 text-[11px] text-slate-500 shrink-0">
+        <div id="tableFooter" class="px-4 py-2 bg-slate-50/80 border-t border-slate-200 text-[11px] text-slate-500 shrink-0">
           <div id="footerFormulaNote"></div>
-          <div id="paginationInfo" class="font-medium text-slate-600 shrink-0 tabular-nums">
-            Showing 6 of 6 investors
-          </div>
         </div>
 
       </section>
@@ -347,7 +337,11 @@
 
   <!-- DATA & APPLICATION LOGIC -->
   <script>
-    // Period-accurate dummy dataset so every number reconciles cleanly across This Month (MTD), Last 30 Days (30D), and All Time (ALL)
+    // Accounting-consistent dataset:
+    // - Deposit = Fresh + Top-ups
+    // - Repayments = Principal received + Interest received - Fees
+    // - Pulled Via Mandate <= Repayments (pulled from repayments)
+    // - Withdrawals = Repayments - Pulled Via Mandate (net repayments sent to investor's bank account)
     const investorsData = [
       {
         userId: "1028491",
@@ -357,9 +351,9 @@
           currentValue: 685000,
           mandateActive: true,
           periods: {
-            MTD:  { fresh: 100000, topup: 50000, mandatePull: 50000, withdrawal: 25000, netReturns: 14200, realisedAmount: 65000 },
-            "30D":{ fresh: 120000, topup: 60000, mandatePull: 50000, withdrawal: 25000, netReturns: 16800, realisedAmount: 78000 },
-            ALL:  { fresh: 700000, topup: 250000, mandatePull: 450000, withdrawal: 350000, netReturns: 135000, realisedAmount: 850000 }
+            MTD:  { fresh: 100000, topup: 50000, repayments: 90000, mandatePull: 50000 },
+            "30D":{ fresh: 120000, topup: 60000, repayments: 105000, mandatePull: 50000 },
+            ALL:  { fresh: 700000, topup: 250000, repayments: 1300000, mandatePull: 450000 }
           }
         },
         estates: {
@@ -387,9 +381,9 @@
           currentValue: 540000,
           mandateActive: true,
           periods: {
-            MTD:  { fresh: 0, topup: 100000, mandatePull: 75000, withdrawal: 0, netReturns: 11400, realisedAmount: 52000 },
-            "30D":{ fresh: 50000, topup: 100000, mandatePull: 75000, withdrawal: 0, netReturns: 13500, realisedAmount: 61000 },
-            ALL:  { fresh: 350000, topup: 200000, mandatePull: 525000, withdrawal: 205000, netReturns: 110000, realisedAmount: 645000 }
+            MTD:  { fresh: 0, topup: 100000, repayments: 110000, mandatePull: 75000 },
+            "30D":{ fresh: 50000, topup: 100000, repayments: 130000, mandatePull: 75000 },
+            ALL:  { fresh: 350000, topup: 200000, repayments: 1170000, mandatePull: 525000 }
           }
         },
         estates: {
@@ -417,9 +411,9 @@
           currentValue: 340000,
           mandateActive: false,
           periods: {
-            MTD:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 50000, netReturns: 6800, realisedAmount: 45000 },
-            "30D":{ fresh: 0, topup: 50000, mandatePull: 0, withdrawal: 50000, netReturns: 8100, realisedAmount: 54000 },
-            ALL:  { fresh: 600000, topup: 200000, mandatePull: 0, withdrawal: 240000, netReturns: 80000, realisedAmount: 540000 }
+            MTD:  { fresh: 0, topup: 0, repayments: 48000, mandatePull: 0 },
+            "30D":{ fresh: 0, topup: 50000, repayments: 62000, mandatePull: 0 },
+            ALL:  { fresh: 600000, topup: 200000, repayments: 540000, mandatePull: 0 }
           }
         },
         estates: {
@@ -447,9 +441,9 @@
           currentValue: 292000,
           mandateActive: false,
           periods: {
-            MTD:  { fresh: 100000, topup: 25000, mandatePull: 0, withdrawal: 0, netReturns: 5900, realisedAmount: 24000 },
-            "30D":{ fresh: 100000, topup: 50000, mandatePull: 0, withdrawal: 0, netReturns: 7200, realisedAmount: 31000 },
-            ALL:  { fresh: 250000, topup: 75000, mandatePull: 125000, withdrawal: 0, netReturns: 42000, realisedAmount: 200000 }
+            MTD:  { fresh: 100000, topup: 25000, repayments: 26000, mandatePull: 0 },
+            "30D":{ fresh: 100000, topup: 50000, repayments: 34000, mandatePull: 0 },
+            ALL:  { fresh: 250000, topup: 75000, repayments: 325000, mandatePull: 125000 }
           }
         },
         estates: {
@@ -477,9 +471,9 @@
           currentValue: 0,
           mandateActive: false,
           periods: {
-            MTD:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0, netReturns: 0, realisedAmount: 0 },
-            "30D":{ fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0, netReturns: 0, realisedAmount: 0 },
-            ALL:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0, netReturns: 0, realisedAmount: 0 }
+            MTD:  { fresh: 0, topup: 0, repayments: 0, mandatePull: 0 },
+            "30D":{ fresh: 0, topup: 0, repayments: 0, mandatePull: 0 },
+            ALL:  { fresh: 0, topup: 0, repayments: 0, mandatePull: 0 }
           }
         },
         estates: {
@@ -507,9 +501,9 @@
           currentValue: 188000,
           mandateActive: true,
           periods: {
-            MTD:  { fresh: 50000, topup: 25000, mandatePull: 20000, withdrawal: 0, netReturns: 3800, realisedAmount: 18000 },
-            "30D":{ fresh: 50000, topup: 40000, mandatePull: 20000, withdrawal: 0, netReturns: 4600, realisedAmount: 22000 },
-            ALL:  { fresh: 150000, topup: 70000, mandatePull: 80000, withdrawal: 0, netReturns: 28000, realisedAmount: 140000 }
+            MTD:  { fresh: 50000, topup: 25000, repayments: 35000, mandatePull: 20000 },
+            "30D":{ fresh: 50000, topup: 40000, repayments: 42000, mandatePull: 20000 },
+            ALL:  { fresh: 150000, topup: 70000, repayments: 220000, mandatePull: 80000 }
           }
         },
         estates: {
@@ -537,9 +531,9 @@
           currentValue: 151200,
           mandateActive: false,
           periods: {
-            MTD:  { fresh: 150000, topup: 0, mandatePull: 0, withdrawal: 0, netReturns: 1200, realisedAmount: 0 },
-            "30D":{ fresh: 150000, topup: 0, mandatePull: 0, withdrawal: 0, netReturns: 1200, realisedAmount: 0 },
-            ALL:  { fresh: 150000, topup: 0, mandatePull: 0, withdrawal: 0, netReturns: 1200, realisedAmount: 0 }
+            MTD:  { fresh: 150000, topup: 0, repayments: 0, mandatePull: 0 },
+            "30D":{ fresh: 150000, topup: 0, repayments: 0, mandatePull: 0 },
+            ALL:  { fresh: 150000, topup: 0, repayments: 0, mandatePull: 0 }
           }
         },
         estates: {
@@ -561,8 +555,9 @@
       }
     ];
 
-    let currentTab = 'P2P';       // P2P | ESTATES | NCD
-    let currentPeriod = 'MTD';    // MTD | 30D | ALL
+    let currentTab = 'P2P';          // P2P | ESTATES | NCD
+    let currentPeriod = 'MTD';       // MTD | 30D | ALL
+    let withdrawalsSortDir = null;   // null | 'desc' | 'asc'
 
     function toggleMobileSidebar(open) {
       const sb = document.getElementById('sidebar');
@@ -585,16 +580,21 @@
       return `₹ ${safeVal.toLocaleString('en-IN')}`;
     }
 
-    // Period calculation helpers (strictly non-negative Net Deposit)
+    // P2P Period Metrics:
+    // - Deposit = Fresh + Top-ups
+    // - Pulled Via Mandate = pulled from repayments (bounded by repayments)
+    // - Withdrawals = total repayments (principal + interest - fees) sent to investor's bank account (Repayments - Pulled Via Mandate)
     function getP2PPeriodMetrics(inv) {
       const pData = inv.p2p.periods[currentPeriod];
-      const netDeposit = Math.max(0, (pData.fresh + pData.topup + pData.mandatePull) - pData.withdrawal);
+      const deposit = Math.max(0, pData.fresh + pData.topup);
+      const pulledViaMandate = Math.min(Math.max(0, pData.mandatePull), Math.max(0, pData.repayments));
+      const withdrawals = Math.max(0, pData.repayments - pulledViaMandate);
+
       return {
-        netDeposit,
+        deposit,
+        pulledViaMandate,
+        withdrawals,
         currentValue: inv.p2p.currentValue,
-        netReturns: pData.netReturns,
-        realisedAmount: pData.realisedAmount,
-        pulledViaMandate: pData.mandatePull,
         mandateActive: inv.p2p.mandateActive
       };
     }
@@ -626,6 +626,17 @@
       return 'All Time';
     }
 
+    function toggleWithdrawalsSort() {
+      if (withdrawalsSortDir === null) {
+        withdrawalsSortDir = 'desc';
+      } else if (withdrawalsSortDir === 'desc') {
+        withdrawalsSortDir = 'asc';
+      } else {
+        withdrawalsSortDir = 'desc';
+      }
+      renderTable();
+    }
+
     function setPeriod(period, btnEl) {
       currentPeriod = period;
       document.querySelectorAll('.period-btn').forEach(b => {
@@ -636,7 +647,6 @@
         btnEl.classList.add('bg-brand-blue', 'text-white', 'font-semibold');
         btnEl.classList.remove('text-slate-600', 'font-medium');
       }
-      setupTabControls();
       renderDashboard();
     }
 
@@ -660,38 +670,7 @@
       };
       document.getElementById('downloadBtnLabel').textContent = downloadLabels[tab];
 
-      setupTabControls();
       renderDashboard();
-    }
-
-    function setupTabControls() {
-      const sortSelect = document.getElementById('sortSelect');
-      const pLabel = getPeriodDisplayName();
-
-      if (currentTab === 'P2P') {
-        sortSelect.innerHTML = `
-          <option value="val_desc">Current Value (High to Low)</option>
-          <option value="dep_desc">${pLabel} Net Deposit (High to Low)</option>
-          <option value="ret_desc">Net Returns (High to Low)</option>
-          <option value="real_desc">Realised Amount (High to Low)</option>
-          <option value="pulled_desc">Pulled via Mandate (High to Low)</option>
-          <option value="name_asc">Investor Name (A-Z)</option>
-        `;
-      } else if (currentTab === 'ESTATES') {
-        sortSelect.innerHTML = `
-          <option value="share_desc">Total Investor Share (High to Low)</option>
-          <option value="unit_desc">Total Unit Cost (High to Low)</option>
-          <option value="pct_desc">Total Share Percentage (High to Low)</option>
-          <option value="name_asc">Investor Name (A-Z)</option>
-        `;
-      } else if (currentTab === 'NCD') {
-        sortSelect.innerHTML = `
-          <option value="inv_desc">Amount Invested (High to Low)</option>
-          <option value="rec_desc">Net Received (High to Low)</option>
-          <option value="xirr_desc">XIRR Pre-Tax (High to Low)</option>
-          <option value="name_asc">Investor Name (A-Z)</option>
-        `;
-      }
     }
 
     function handleGlobalSearch(val) {
@@ -707,7 +686,6 @@
 
     function getFilteredInvestors() {
       const q = document.getElementById('tableSearchInput').value.trim().toLowerCase();
-      const sortBy = document.getElementById('sortSelect').value;
 
       let list = investorsData.filter(inv => {
         if (currentTab === 'P2P' && !inv.p2p.invested) return false;
@@ -721,32 +699,13 @@
         return true;
       });
 
-      list.sort((a, b) => {
-        if (sortBy === 'name_asc') return a.name.localeCompare(b.name);
-
-        if (currentTab === 'P2P') {
-          const ma = getP2PPeriodMetrics(a);
-          const mb = getP2PPeriodMetrics(b);
-          if (sortBy === 'val_desc') return mb.currentValue - ma.currentValue;
-          if (sortBy === 'dep_desc') return mb.netDeposit - ma.netDeposit;
-          if (sortBy === 'ret_desc') return mb.netReturns - ma.netReturns;
-          if (sortBy === 'real_desc') return mb.realisedAmount - ma.realisedAmount;
-          if (sortBy === 'pulled_desc') return mb.pulledViaMandate - ma.pulledViaMandate;
-        } else if (currentTab === 'ESTATES') {
-          const ma = getEstatesPeriodMetrics(a);
-          const mb = getEstatesPeriodMetrics(b);
-          if (sortBy === 'share_desc') return mb.totalInvestorShare - ma.totalInvestorShare;
-          if (sortBy === 'unit_desc') return mb.totalUnitCost - ma.totalUnitCost;
-          if (sortBy === 'pct_desc') return mb.totalSharePercentage - ma.totalSharePercentage;
-        } else if (currentTab === 'NCD') {
-          const ma = getNCDPeriodMetrics(a);
-          const mb = getNCDPeriodMetrics(b);
-          if (sortBy === 'inv_desc') return mb.amountInvested - ma.amountInvested;
-          if (sortBy === 'rec_desc') return mb.netPayoutsReceived - ma.netPayoutsReceived;
-          if (sortBy === 'xirr_desc') return mb.xirrPreTax - ma.xirrPreTax;
-        }
-        return 0;
-      });
+      if (currentTab === 'P2P' && withdrawalsSortDir) {
+        list.sort((a, b) => {
+          const wa = getP2PPeriodMetrics(a).withdrawals;
+          const wb = getP2PPeriodMetrics(b).withdrawals;
+          return withdrawalsSortDir === 'desc' ? wb - wa : wa - wb;
+        });
+      }
 
       return list;
     }
@@ -758,45 +717,41 @@
       if (currentTab === 'P2P') {
         strip.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3';
         const list = investorsData.filter(i => i.p2p.invested);
-        const p2pCurrentVal = list.reduce((s, i) => s + getP2PPeriodMetrics(i).currentValue, 0);
-        const netDep = list.reduce((s, i) => s + getP2PPeriodMetrics(i).netDeposit, 0);
-        const realisedAmt = list.reduce((s, i) => s + getP2PPeriodMetrics(i).realisedAmount, 0);
-        const profit = list.reduce((s, i) => s + getP2PPeriodMetrics(i).netReturns, 0);
-        const pulled = list.reduce((s, i) => s + getP2PPeriodMetrics(i).pulledViaMandate, 0);
+        const totalCurrentVal = list.reduce((s, i) => s + getP2PPeriodMetrics(i).currentValue, 0);
+        const totalDeposit = list.reduce((s, i) => s + getP2PPeriodMetrics(i).deposit, 0);
+        const totalPulled = list.reduce((s, i) => s + getP2PPeriodMetrics(i).pulledViaMandate, 0);
+        const totalWithdrawals = list.reduce((s, i) => s + getP2PPeriodMetrics(i).withdrawals, 0);
 
         strip.innerHTML = `
           <div class="hero-card-gradient text-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
-            <div class="flex items-center justify-between">
-              <span class="text-xs text-blue-200 font-medium">P2P Current Value</span>
-              <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full tabular-nums">${list.length} Investors</span>
-            </div>
+            <span class="text-xs text-blue-200 font-medium">P2P Current Value</span>
             <div class="mt-2.5">
-              <div class="text-xl sm:text-2xl font-bold tabular-nums">${formatINR(p2pCurrentVal, true)}</div>
+              <div class="text-xl sm:text-2xl font-bold tabular-nums">${formatINR(totalCurrentVal, true)}</div>
               <div class="text-[11px] text-slate-300 mt-0.5">Principal active in loans (POS - NPA)</div>
             </div>
           </div>
 
           <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
-            <span class="text-xs font-medium text-slate-500">${pLabel} Net Deposit</span>
+            <span class="text-xs font-medium text-slate-500">Deposit (${pLabel})</span>
             <div class="mt-2">
-              <div class="text-lg sm:text-xl font-bold text-slate-900 tabular-nums">${formatINR(netDep)}</div>
-              <div class="text-[11px] text-slate-400 mt-0.5">(Fresh + Top-ups + Pulls) - Withdrawals</div>
+              <div class="text-lg sm:text-xl font-bold text-slate-900 tabular-nums">${formatINR(totalDeposit)}</div>
+              <div class="text-[11px] text-slate-400 mt-0.5">Fresh + Top-ups</div>
             </div>
           </div>
 
           <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
-            <span class="text-xs font-medium text-slate-500">Net Returns (${pLabel})</span>
+            <span class="text-xs font-medium text-slate-500">Pulled Via Mandate (${pLabel})</span>
             <div class="mt-2">
-              <div class="text-lg sm:text-xl font-bold text-emerald-700 tabular-nums">+${formatINR(profit)}</div>
-              <div class="text-[11px] text-slate-400 mt-0.5">Realised Amount: ${formatINR(realisedAmt, true)}</div>
+              <div class="text-lg sm:text-xl font-bold text-brand-blue tabular-nums">${formatINR(totalPulled)}</div>
+              <div class="text-[11px] text-slate-400 mt-0.5">Reinvested via auto-debit mandate</div>
             </div>
           </div>
 
           <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
-            <span class="text-xs font-medium text-slate-500">Pulled via Mandate (${pLabel})</span>
+            <span class="text-xs font-medium text-slate-500">Withdrawals (${pLabel})</span>
             <div class="mt-2">
-              <div class="text-lg sm:text-xl font-bold text-slate-900 tabular-nums">${formatINR(pulled)}</div>
-              <div class="text-[11px] text-slate-400 mt-0.5">Auto-debit pulls in selected period</div>
+              <div class="text-lg sm:text-xl font-bold text-slate-900 tabular-nums">${formatINR(totalWithdrawals)}</div>
+              <div class="text-[11px] text-slate-400 mt-0.5">Repayments credited to bank</div>
             </div>
           </div>
         `;
@@ -809,10 +764,7 @@
 
         strip.innerHTML = `
           <div class="hero-card-gradient text-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
-            <div class="flex items-center justify-between">
-              <span class="text-xs text-blue-200 font-medium">Total Unit Cost (${pLabel})</span>
-              <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full tabular-nums">${list.length} Investors</span>
-            </div>
+            <span class="text-xs text-blue-200 font-medium">Total Unit Cost (${pLabel})</span>
             <div class="mt-2.5">
               <div class="text-xl sm:text-2xl font-bold tabular-nums">${formatINR(totalUnitCost, true)}</div>
               <div class="text-[11px] text-slate-300 mt-0.5 tabular-nums">${formatINR(totalUnitCost)}</div>
@@ -836,7 +788,7 @@
           </div>
         `;
       } else if (currentTab === 'NCD') {
-        strip.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3';
+        strip.className = 'grid grid-cols-1 sm:grid-cols-3 gap-3';
         const list = investorsData.filter(i => i.ncd.invested);
         const totalInv = list.reduce((s, i) => s + getNCDPeriodMetrics(i).amountInvested, 0);
         const netRecd = list.reduce((s, i) => s + getNCDPeriodMetrics(i).netPayoutsReceived, 0);
@@ -849,10 +801,7 @@
 
         strip.innerHTML = `
           <div class="hero-card-gradient text-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
-            <div class="flex items-center justify-between">
-              <span class="text-xs text-blue-200 font-medium">Amount Invested (${pLabel})</span>
-              <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full tabular-nums">${list.length} Investors</span>
-            </div>
+            <span class="text-xs text-blue-200 font-medium">Amount Invested (${pLabel})</span>
             <div class="mt-2.5">
               <div class="text-xl sm:text-2xl font-bold tabular-nums">${formatINR(totalInv, true)}</div>
               <div class="text-[11px] text-slate-300 mt-0.5 tabular-nums">${formatINR(totalInv)}</div>
@@ -874,30 +823,22 @@
               <div class="text-[11px] text-slate-400 mt-0.5">Annualised pre-tax yield</div>
             </div>
           </div>
-
-          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs flex flex-col justify-between">
-            <span class="text-xs font-medium text-slate-500">NCD Investors</span>
-            <div class="mt-2">
-              <div class="text-lg sm:text-xl font-bold text-slate-900 tabular-nums">${list.length}</div>
-              <div class="text-[11px] text-slate-400 mt-0.5">Across listed & unlisted NCDs</div>
-            </div>
-          </div>
         `;
       }
     }
 
-    // Mandate Status: Only "Active" or "Create Now" CTA
-    function getMandateStatusHtml(isActive, investorName) {
+    // On Demand Mandate CTAs: "Pull Now" (when mandate is created/active) and "Create Now" (when mandate is not created)
+    function getOnDemandMandateHtml(isActive, investorName) {
       if (isActive) {
         return `
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Active
-          </span>
+          <button type="button" onclick="openToast('Pull request initiated for ${investorName}')" class="inline-flex items-center justify-center px-3 py-1 rounded-md bg-brand-blue hover:bg-brand-blueHover text-white font-semibold text-[11px] shadow-2xs transition">
+            Pull Now
+          </button>
         `;
       }
       return `
-        <button type="button" onclick="openToast('Mandate creation link sent to ${investorName}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-50 hover:bg-blue-100 text-brand-blue font-semibold text-[11px] border border-blue-200 transition">
-          <span>Create Now</span>
+        <button type="button" onclick="openToast('Mandate creation link sent to ${investorName}')" class="inline-flex items-center justify-center px-3 py-1 rounded-md bg-blue-50 hover:bg-blue-100 text-brand-blue font-semibold text-[11px] border border-blue-200 transition">
+          Create Now
         </button>
       `;
     }
@@ -909,13 +850,6 @@
       const mobileList = document.getElementById('mobileCardList');
       const emptyState = document.getElementById('emptyState');
       const footerNote = document.getElementById('footerFormulaNote');
-      const pLabel = getPeriodDisplayName();
-
-      const totalCount = currentTab === 'P2P' ? investorsData.filter(i => i.p2p.invested).length :
-                         currentTab === 'ESTATES' ? investorsData.filter(i => i.estates.invested).length :
-                         investorsData.filter(i => i.ncd.invested).length;
-
-      document.getElementById('paginationInfo').textContent = `Showing ${list.length} of ${totalCount} investors`;
 
       if (list.length === 0) {
         thead.innerHTML = '';
@@ -927,29 +861,38 @@
       }
       emptyState.classList.add('hidden');
 
-      // 1. P2P EDGE TABLE (9 well-proportioned columns, zero wasted whitespace)
+      // 1. P2P EDGE TABLE
+      // Exact columns in order: User ID, Investor Name, Deposit, Pulled Via Mandate, Withdrawals (with ↑/↓ sort), Current Value, On Demand Mandate
       if (currentTab === 'P2P') {
         footerNote.innerHTML = `
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span><strong>Product Scope:</strong> P2P Edge combines both Growth and Monthly EMI plans.</span>
             <span class="hidden sm:inline text-slate-300">|</span>
-            <span><strong>Net Deposit Formula:</strong> (Fresh + Top-ups + Mandate Pulls) - Withdrawals</span>
+            <span><strong>Net Deposit Formula:</strong> (Fresh + Top-ups)</span>
             <span class="hidden sm:inline text-slate-300">|</span>
             <span><strong>Current Value:</strong> Principal amount active in loans excluding the NPA amount (POS - NPA)</span>
           </div>
         `;
 
+        const sortArrow = withdrawalsSortDir === 'asc'
+          ? '<span class="text-brand-blue font-bold ml-1">↑</span>'
+          : withdrawalsSortDir === 'desc'
+            ? '<span class="text-brand-blue font-bold ml-1">↓</span>'
+            : '<span class="text-slate-400 ml-1">↑↓</span>';
+
         thead.innerHTML = `
           <tr>
-            <th class="py-2.5 pl-4 pr-2 w-[8%]">User ID</th>
-            <th class="py-2.5 px-2 w-[15%]">Investor Name</th>
-            <th class="py-2.5 px-2 text-right w-[11%]">${pLabel} Net Deposit</th>
-            <th class="py-2.5 px-2 text-right w-[11%]">Current Value</th>
-            <th class="py-2.5 px-2 text-right w-[10%]">Net Returns</th>
-            <th class="py-2.5 px-2 text-right w-[11%]">Realised Amount</th>
-            <th class="py-2.5 px-2 text-center w-[11%]">Mandate Status</th>
-            <th class="py-2.5 px-2 text-right w-[11%]">Pulled via Mandate</th>
-            <th class="py-2.5 pl-2 pr-4 text-right w-[12%]">Action</th>
+            <th class="py-2.5 pl-4 pr-3 w-[11%]">User ID</th>
+            <th class="py-2.5 px-3 w-[20%]">Investor Name</th>
+            <th class="py-2.5 px-3 text-right w-[13%]">Deposit</th>
+            <th class="py-2.5 px-3 text-right w-[15%]">Pulled Via Mandate</th>
+            <th class="py-2.5 px-3 text-right w-[13%]">
+              <button type="button" onclick="toggleWithdrawalsSort()" class="inline-flex items-center justify-end gap-0.5 uppercase tracking-wider hover:text-slate-800 transition focus:outline-none">
+                <span>Withdrawals</span>${sortArrow}
+              </button>
+            </th>
+            <th class="py-2.5 px-3 text-right w-[14%]">Current Value</th>
+            <th class="py-2.5 pl-3 pr-4 text-center w-[14%]">On Demand Mandate</th>
           </tr>
         `;
 
@@ -958,33 +901,24 @@
 
           return `
             <tr class="hover:bg-blue-50/30 transition">
-              <td class="py-2.5 pl-4 pr-2 font-mono text-[11.5px] text-slate-500 font-medium whitespace-nowrap">${inv.userId}</td>
-              <td class="py-2.5 px-2">
+              <td class="py-3 pl-4 pr-3 font-mono text-[11.5px] text-slate-500 font-medium whitespace-nowrap">${inv.userId}</td>
+              <td class="py-3 px-3">
                 <a href="javascript:void(0)" class="font-semibold text-brand-blue hover:underline cursor-pointer block truncate" title="${inv.name}">${inv.name}</a>
               </td>
-              <td class="py-2.5 px-2 text-right font-semibold text-slate-800 whitespace-nowrap">
-                ${formatINR(m.netDeposit)}
+              <td class="py-3 px-3 text-right font-semibold text-slate-800 whitespace-nowrap">
+                ${formatINR(m.deposit)}
               </td>
-              <td class="py-2.5 px-2 text-right font-bold text-slate-900 whitespace-nowrap">
-                ${formatINR(m.currentValue)}
-              </td>
-              <td class="py-2.5 px-2 text-right font-semibold text-emerald-700 whitespace-nowrap">
-                +${formatINR(m.netReturns)}
-              </td>
-              <td class="py-2.5 px-2 text-right font-medium text-slate-700 whitespace-nowrap">
-                ${formatINR(m.realisedAmount)}
-              </td>
-              <td class="py-2.5 px-2 text-center whitespace-nowrap">
-                ${getMandateStatusHtml(m.mandateActive, inv.name)}
-              </td>
-              <td class="py-2.5 px-2 text-right font-semibold text-slate-800 whitespace-nowrap">
+              <td class="py-3 px-3 text-right font-semibold text-slate-800 whitespace-nowrap">
                 ${formatINR(m.pulledViaMandate)}
               </td>
-              <td class="py-2.5 pl-2 pr-4 text-right whitespace-nowrap">
-                <button type="button" onclick="downloadInvestorReport('${inv.userId}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-slate-200 bg-white hover:bg-blue-50 hover:border-blue-200 text-[11px] font-medium text-brand-blue transition">
-                  <i data-lucide="download" class="w-3 h-3"></i>
-                  <span>Download Report</span>
-                </button>
+              <td class="py-3 px-3 text-right font-medium text-slate-700 whitespace-nowrap">
+                ${formatINR(m.withdrawals)}
+              </td>
+              <td class="py-3 px-3 text-right font-bold text-slate-900 whitespace-nowrap">
+                ${formatINR(m.currentValue)}
+              </td>
+              <td class="py-3 pl-3 pr-4 text-center whitespace-nowrap">
+                ${getOnDemandMandateHtml(m.mandateActive, inv.name)}
               </td>
             </tr>
           `;
@@ -994,40 +928,31 @@
           const m = getP2PPeriodMetrics(inv);
           return `
             <div class="p-4 space-y-3 bg-white">
-              <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center justify-between gap-2">
                 <div>
                   <a href="javascript:void(0)" class="font-semibold text-sm text-brand-blue hover:underline">${inv.name}</a>
                   <div class="text-[11px] font-mono text-slate-400 mt-0.5">ID: ${inv.userId}</div>
                 </div>
-                <button type="button" onclick="downloadInvestorReport('${inv.userId}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-medium text-brand-blue">
-                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                  <span>Download Report</span>
-                </button>
+                <div>
+                  ${getOnDemandMandateHtml(m.mandateActive, inv.name)}
+                </div>
               </div>
               <div class="grid grid-cols-2 gap-2.5 bg-slate-50/80 p-3 rounded-lg border border-slate-100 text-xs tabular-nums">
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Current Value</span>
-                  <span class="font-bold text-slate-900">${formatINR(m.currentValue)}</span>
+                  <span class="text-[10px] text-slate-400 block">Deposit</span>
+                  <span class="font-semibold text-slate-800">${formatINR(m.deposit)}</span>
                 </div>
                 <div>
-                  <span class="text-[10px] text-slate-400 block">${pLabel} Net Deposit</span>
-                  <span class="font-semibold text-slate-800">${formatINR(m.netDeposit)}</span>
-                </div>
-                <div>
-                  <span class="text-[10px] text-slate-400 block">Net Returns</span>
-                  <span class="font-semibold text-emerald-700">+${formatINR(m.netReturns)}</span>
-                </div>
-                <div>
-                  <span class="text-[10px] text-slate-400 block">Realised Amount</span>
-                  <span class="font-medium text-slate-700">${formatINR(m.realisedAmount)}</span>
-                </div>
-                <div>
-                  <span class="text-[10px] text-slate-400 block">Pulled via Mandate</span>
+                  <span class="text-[10px] text-slate-400 block">Pulled Via Mandate</span>
                   <span class="font-semibold text-slate-800">${formatINR(m.pulledViaMandate)}</span>
                 </div>
                 <div>
-                  <span class="text-[10px] text-slate-400 block mb-0.5">Mandate Status</span>
-                  ${getMandateStatusHtml(m.mandateActive, inv.name)}
+                  <span class="text-[10px] text-slate-400 block">Withdrawals</span>
+                  <span class="font-medium text-slate-700">${formatINR(m.withdrawals)}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">Current Value</span>
+                  <span class="font-bold text-slate-900">${formatINR(m.currentValue)}</span>
                 </div>
               </div>
             </div>
@@ -1035,7 +960,7 @@
         }).join('');
       }
 
-      // 2. ESTATES TABLE (6 proportional columns, crisp alignment)
+      // 2. ESTATES TABLE
       else if (currentTab === 'ESTATES') {
         footerNote.innerHTML = '';
 
@@ -1107,7 +1032,7 @@
         }).join('');
       }
 
-      // 3. NCDs TABLE (6 proportional columns, crisp alignment)
+      // 3. NCDs TABLE
       else if (currentTab === 'NCD') {
         footerNote.textContent = 'Net Payouts Received are post 10% TDS on the interest component. Full principal is returned on Maturity Date.';
 
@@ -1200,11 +1125,7 @@
       let headers = [];
       let row = [];
 
-      if (currentTab === 'P2P') {
-        const m = getP2PPeriodMetrics(inv);
-        headers = ['User ID', 'Investor Name', `${pLabel} Net Deposit`, 'Current Value', 'Net Returns', 'Realised Amount', 'Mandate Status', 'Pulled via Mandate'];
-        row = [inv.userId, `"${inv.name}"`, m.netDeposit, m.currentValue, m.netReturns, m.realisedAmount, m.mandateActive ? 'Active' : 'Not Created', m.pulledViaMandate];
-      } else if (currentTab === 'ESTATES') {
+      if (currentTab === 'ESTATES') {
         const m = getEstatesPeriodMetrics(inv);
         headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Investor Share', 'Total Share Percentage'];
         row = [inv.userId, `"${inv.name}"`, m.totalUnitCost, m.totalInvestorShare, `${m.totalSharePercentage.toFixed(2)}%`];
@@ -1232,10 +1153,10 @@
       let rows = [];
 
       if (currentTab === 'P2P') {
-        headers = ['User ID', 'Investor Name', `${pLabel} Net Deposit`, 'Current Value', 'Net Returns', 'Realised Amount', 'Mandate Status', 'Pulled via Mandate'];
+        headers = ['User ID', 'Investor Name', 'Deposit', 'Pulled Via Mandate', 'Withdrawals', 'Current Value', 'On Demand Mandate'];
         rows = list.map(i => {
           const m = getP2PPeriodMetrics(i);
-          return [i.userId, `"${i.name}"`, m.netDeposit, m.currentValue, m.netReturns, m.realisedAmount, m.mandateActive ? 'Active' : 'Not Created', m.pulledViaMandate];
+          return [i.userId, `"${i.name}"`, m.deposit, m.pulledViaMandate, m.withdrawals, m.currentValue, m.mandateActive ? 'Pull Now' : 'Create Now'];
         });
       } else if (currentTab === 'ESTATES') {
         headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Investor Share', 'Total Share Percentage'];
@@ -1262,7 +1183,7 @@
       link.click();
       document.body.removeChild(link);
 
-      openToast(`Downloaded ${currentTab} list (${list.length} investors)`);
+      openToast(`Downloaded ${currentTab} list`);
     }
 
     let toastTimer;
@@ -1277,7 +1198,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      setupTabControls();
       renderDashboard();
     });
   </script>
