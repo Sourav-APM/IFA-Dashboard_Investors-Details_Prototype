@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Per Annum Partner Portal - Investor Book</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              sidebar: '#131D2E',
+              sidebarHover: '#1D2B42',
+              sidebarActive: '#26344B',
+              blue: '#2B6CE6',
+              blueHover: '#2259C4',
+              blueLight: '#EBF2FF',
+              bg: '#F8FAFC',
+              border: '#E2E8F0',
+              textMain: '#0F172A',
+              textMuted: '#64748B',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+    }
+    .hero-card-gradient {
+      background: radial-gradient(circle at 88% 20%, rgba(43, 108, 230, 0.42) 0%, rgba(19, 29, 46, 0.96) 52%, #0F172A 100%);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+    .drawer-transition {
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- MOBILE SIDEBAR BACKDROP -->
+  <div id="mobileSidebarBackdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/50 z-30 hidden lg:hidden"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 lg:static w-60 bg-brand-sidebar text-slate-300 flex flex-col justify-between shrink-0 select-none z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-200">
+    <div>
+      <!-- Logo -->
+      <div class="h-16 px-5 flex items-center justify-between border-b border-slate-800/70">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded bg-white text-brand-sidebar flex items-center justify-center font-bold text-sm tracking-tighter">
+            %
+          </div>
+          <div class="leading-none">
+            <div class="text-white font-bold text-[15px] tracking-tight">Per Annum</div>
+            <div class="text-[9px] text-slate-400 tracking-[0.14em] uppercase mt-0.5 font-medium">Partner Portal</div>
+          </div>
+        </div>
+        <button onclick="toggleMobileSidebar(false)" class="lg:hidden text-slate-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Primary CTA -->
+      <div class="p-4">
+        <button onclick="openToast('Add Investor link copied to clipboard')" class="w-full bg-brand-blue hover:bg-brand-blueHover text-white font-medium text-sm py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-sm transition">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Add Investors</span>
+        </button>
+      </div>
+
+      <!-- Nav Group: GENERAL -->
+      <div class="px-3 mt-1">
+        <div class="px-3 text-[10px] font-semibold tracking-wider text-slate-500 uppercase mb-2">General</div>
+        <nav class="space-y-0.5 text-[13px]">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="home" class="w-4 h-4 text-slate-400"></i>
+            <span>Home</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="wallet" class="w-4 h-4 text-slate-400"></i>
+            <span>Fund Management</span>
+          </a>
+          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-brand-sidebarActive text-white font-medium shadow-sm border border-slate-700/50">
+            <div class="flex items-center gap-3">
+              <i data-lucide="users" class="w-4 h-4 text-blue-400"></i>
+              <span>Investor Book</span>
+            </div>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Ref IFAs</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i>
+            <span>Old P2P</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="arrow-left-right" class="w-4 h-4 text-slate-400"></i>
+            <span>Transactions</span>
+          </a>
+          <a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <div class="flex items-center gap-3">
+              <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+              <span>Estates</span>
+            </div>
+            <span class="bg-emerald-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-0.5">
+              <i data-lucide="zap" class="w-2.5 h-2.5 fill-current"></i> New
+            </span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Nav Group: MORE -->
+      <div class="px-3 mt-6">
+        <div class="px-3 text-[10px] font-semibold tracking-wider text-slate-500 uppercase mb-2">More</div>
+        <nav class="space-y-0.5 text-[13px]">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="indian-rupee" class="w-4 h-4 text-slate-400"></i>
+            <span>Payouts</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-slate-400"></i>
+            <span>User Reports</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i>
+            <span>Branding Material</span>
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-brand-sidebarHover hover:text-white transition">
+            <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+            <span>Fact Sheets</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Bottom Switch -->
+    <div class="p-3 border-t border-slate-800/80">
+      <button class="w-full py-2 px-3 rounded-lg bg-slate-800/70 hover:bg-slate-800 text-slate-200 text-xs font-medium flex items-center justify-center gap-2 transition">
+        <span>Switch to Per Annum</span>
+        <i data-lucide="log-out" class="w-3.5 h-3.5 text-slate-400"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN SHELL -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- TOP HEADER -->
+    <header class="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between gap-3 shrink-0 z-10">
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <!-- Mobile Hamburger -->
+        <button onclick="toggleMobileSidebar(true)" class="lg:hidden p-2 -ml-2 rounded-lg text-slate-600 hover:bg-slate-100">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Global Investor Quick Jump -->
+        <div class="relative w-full max-w-xs sm:max-w-sm">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input 
+            type="text" 
+            id="globalQuickSearch"
+            oninput="handleGlobalSearch(this.value)"
+            placeholder="Search investor by name or ID..." 
+            class="w-full pl-10 pr-4 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-blue-100 transition placeholder:text-slate-400"
+          />
+        </div>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <button onclick="openToast('Referral link copied!')" class="hidden sm:flex px-3.5 py-1.5 rounded-lg bg-brand-blueLight hover:bg-blue-100 text-brand-blue text-xs font-semibold items-center gap-1.5 transition">
+          <span>Refer Now</span>
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+        <button onclick="openToast('Opening Promotional Content')" class="hidden md:flex px-3.5 py-1.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white text-xs font-semibold items-center gap-1.5 shadow-sm transition">
+          <span>Promotional Content</span>
+          <i data-lucide="megaphone" class="w-3.5 h-3.5"></i>
+        </button>
+        <div class="hidden sm:block h-5 w-[1px] bg-slate-200 mx-0.5"></div>
+        <div class="flex items-center gap-2 cursor-pointer">
+          <span class="hidden sm:inline text-xs font-medium text-slate-700">Rishabh Jain</span>
+          <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-semibold text-xs flex items-center justify-center border border-emerald-200">
+            RJ
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- SCROLLABLE WORKSPACE -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 relative">
+
+      <!-- PAGE HEADER + DATE RANGE SELECTOR -->
+      <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Investor Book</h1>
+            <span class="text-[11px] font-medium text-slate-500 bg-white border border-slate-200 px-2.5 py-0.5 rounded-full">
+              Updated: 17 Nov 2026, 1:30 PM
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">
+            View investor holdings, deposits, active values, and returns across all products or by individual product.
+          </p>
+        </div>
+
+        <!-- Global Period Selector -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="bg-white border border-slate-200 rounded-lg p-1 flex flex-wrap items-center text-xs font-medium shadow-2xs" id="datePresets">
+            <button onclick="setPeriod('MTD', this)" class="period-btn px-2.5 py-1 rounded-md bg-brand-blue text-white transition">This Month (MTD)</button>
+            <button onclick="setPeriod('30D', this)" class="period-btn px-2.5 py-1 rounded-md text-slate-600 hover:bg-slate-100 transition">Last 30 Days</button>
+            <button onclick="setPeriod('FY26', this)" class="period-btn px-2.5 py-1 rounded-md text-slate-600 hover:bg-slate-100 transition">FY 2026-27</button>
+            <button onclick="setPeriod('ALL', this)" class="period-btn px-2.5 py-1 rounded-md text-slate-600 hover:bg-slate-100 transition">All Time</button>
+            <button onclick="toggleCustomDate()" id="customDateBtn" class="period-btn px-2.5 py-1 rounded-md text-slate-600 hover:bg-slate-100 flex items-center gap-1 transition">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+              <span>Custom</span>
+            </button>
+          </div>
+
+          <!-- Custom Date Inputs -->
+          <div id="customDateInputs" class="hidden items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs shadow-2xs">
+            <input type="date" id="startDate" value="2026-11-01" class="text-slate-700 focus:outline-none text-xs">
+            <span class="text-slate-400">to</span>
+            <input type="date" id="endDate" value="2026-11-17" class="text-slate-700 focus:outline-none text-xs">
+            <button onclick="applyCustomDate()" class="ml-1 px-2 py-0.5 bg-blue-50 text-brand-blue font-semibold rounded hover:bg-blue-100">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI SUMMARY STRIP (Strictly applicable to selected product tab) -->
+      <section id="kpiStrip" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Populated dynamically per selected product tab -->
+      </section>
+
+      <!-- PRODUCT TABS + TABLE CARD -->
+      <section class="bg-white border border-slate-200 rounded-xl shadow-2xs overflow-hidden">
+        
+        <!-- Single-Line Non-Scrollable Product Tabs -->
+        <div class="border-b border-slate-200 px-3 sm:px-5 pt-2.5 bg-slate-50/60">
+          <div class="grid grid-cols-4 sm:flex sm:items-center sm:gap-2" id="productTabs">
+            <button onclick="switchProductTab('ALL')" data-tab="ALL" class="tab-btn px-1.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-semibold border-b-2 border-brand-blue text-brand-blue flex items-center justify-center sm:justify-start gap-1.5 text-center transition">
+              <span>All Products</span>
+              <span class="hidden sm:inline bg-blue-100 text-brand-blue px-1.5 py-0.2 rounded-full text-[10px]" id="count-ALL">8</span>
+            </button>
+
+            <button onclick="switchProductTab('P2P')" data-tab="P2P" class="tab-btn px-1.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 flex items-center justify-center sm:justify-start gap-1.5 text-center transition">
+              <span>P2P Edge</span>
+              <span class="hidden sm:inline bg-slate-200/80 text-slate-700 px-1.5 py-0.2 rounded-full text-[10px]" id="count-P2P">6</span>
+            </button>
+
+            <button onclick="switchProductTab('ESTATES')" data-tab="ESTATES" class="tab-btn px-1.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 flex items-center justify-center sm:justify-start gap-1.5 text-center transition">
+              <span>Estates</span>
+              <span class="hidden sm:inline bg-slate-200/80 text-slate-700 px-1.5 py-0.2 rounded-full text-[10px]" id="count-ESTATES">4</span>
+            </button>
+
+            <button onclick="switchProductTab('NCD')" data-tab="NCD" class="tab-btn px-1.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-medium border-b-2 border-transparent text-slate-600 hover:text-slate-900 flex items-center justify-center sm:justify-start gap-1.5 text-center transition">
+              <span>NCDs</span>
+              <span class="hidden sm:inline bg-slate-200/80 text-slate-700 px-1.5 py-0.2 rounded-full text-[10px]" id="count-NCD">4</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Context Description Line Below Tabs -->
+        <div id="tabContextBar" class="px-4 sm:px-5 py-2.5 bg-blue-50/40 border-b border-slate-100 text-[11px] sm:text-xs text-slate-600 flex items-center gap-2">
+          <i data-lucide="info" class="w-3.5 h-3.5 text-brand-blue shrink-0"></i>
+          <span id="tabContextText">Combined overview of deposits, active portfolio value, and realised returns across P2P Edge, Estates, and NCDs.</span>
+        </div>
+
+        <!-- Search, Product-Relevant Filters, Sort & Table Download Button -->
+        <div class="p-4 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white">
+          
+          <!-- Left: Search + Context-Aware Filter Chips -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative w-full sm:w-64">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input 
+                type="text" 
+                id="tableSearchInput"
+                oninput="applyFilters()"
+                placeholder="Search name, user ID, or phone..." 
+                class="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-blue-50"
+              />
+            </div>
+
+            <!-- Dynamic Relevant Filter Chips -->
+            <div id="dynamicFilterChips" class="flex flex-wrap items-center gap-1.5">
+              <!-- Populated per tab -->
+            </div>
+          </div>
+
+          <!-- Right: Sort + Direct Table Download Button -->
+          <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2">
+            <div class="flex items-center gap-1.5 text-xs">
+              <span class="text-slate-400">Sort:</span>
+              <select id="sortSelect" onchange="applyFilters()" class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 font-medium bg-white focus:outline-none focus:border-brand-blue">
+                <!-- Populated per tab -->
+              </select>
+            </div>
+
+            <!-- Dedicated Download Button for Current Product Table -->
+            <button onclick="downloadCurrentTableCSV()" class="px-3.5 py-1.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-medium text-xs flex items-center gap-1.5 shadow-2xs transition">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span id="downloadBtnLabel">Download All Products List</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- DYNAMIC PRODUCT-SPECIFIC DATA TABLE -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse" id="investorTable">
+            <thead id="tableHead" class="bg-slate-50 border-b border-slate-200 text-[11px] font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+              <!-- Rendered dynamically per product tab -->
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-slate-100 text-xs text-slate-700">
+              <!-- Rendered dynamically per product tab -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden py-14 px-6 text-center">
+          <div class="w-11 h-11 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="search-x" class="w-5 h-5"></i>
+          </div>
+          <div class="text-sm font-semibold text-slate-800">No investors match this filter</div>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">Try clearing your search or resetting the selected filter.</p>
+          <button onclick="resetFilters()" class="mt-4 px-3.5 py-1.5 bg-brand-blue text-white text-xs font-medium rounded-lg hover:bg-brand-blueHover transition">
+            Reset Filters
+          </button>
+        </div>
+
+        <!-- Table Footer -->
+        <div class="px-4 sm:px-5 py-3 bg-slate-50/70 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-slate-500">
+          <div id="footerFormulaNote">
+            Click any investor row to view complete product holdings and download client statements.
+          </div>
+          <div id="paginationInfo" class="font-medium text-slate-600">
+            Showing 8 of 8 investors
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- SLIDE-OVER INVESTOR DETAIL DRAWER -->
+  <div id="drawerBackdrop" onclick="closeInvestorDrawer()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[1px] z-40 hidden transition-opacity"></div>
+  <aside id="investorDrawer" class="fixed top-0 right-0 h-full w-full max-w-xl bg-white shadow-2xl z-50 transform translate-x-full drawer-transition flex flex-col border-l border-slate-200">
+    
+    <!-- Drawer Header -->
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/70 shrink-0">
+      <div class="flex items-center gap-3 min-w-0">
+        <div id="drawerAvatar" class="w-10 h-10 rounded-full bg-brand-blue text-white font-bold text-sm flex items-center justify-center shrink-0">
+          AS
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h2 id="drawerName" class="text-base font-bold text-slate-900 truncate">Aarav Sharma</h2>
+            <span id="drawerUserId" class="text-xs font-mono bg-slate-200/80 text-slate-700 px-2 py-0.5 rounded shrink-0">1028491</span>
+          </div>
+          <div id="drawerContact" class="text-xs text-slate-500 mt-0.5 truncate">
+            +91 98112 44910 • aarav.sharma@gmail.com
+          </div>
+        </div>
+      </div>
+      <button onclick="closeInvestorDrawer()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition shrink-0">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div id="drawerContent" class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
+      <!-- Populated dynamically -->
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="px-5 sm:px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-2 shrink-0">
+      <button onclick="openToast('Statement of Account downloaded')" class="px-3.5 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center gap-1.5 transition">
+        <i data-lucide="file-down" class="w-3.5 h-3.5 text-brand-blue"></i>
+        <span>Statement of Account</span>
+      </button>
+      <button onclick="openToast('Opening full investor profile...')" class="px-4 py-2 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white text-xs font-semibold flex items-center gap-1.5 transition">
+        <span>Open Full Profile</span>
+        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-lg flex items-center gap-2.5 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMessage">Action completed</span>
+  </div>
+
+  <!-- DATA & APPLICATION LOGIC -->
+  <script>
+    const investorsData = [
+      {
+        userId: "1028491",
+        name: "Aarav Sharma",
+        phone: "+91 98112 44910",
+        email: "aarav.sharma@gmail.com",
+        joinedDate: "14 Mar 2025",
+        periodDeposits: { MTD: 250000, "30D": 300000, FY26: 1850000, ALL: 2950000 },
+        // 1. P2P Edge (Aligned with P2P Edge Portfolio Prototype)
+        p2p: {
+          invested: true,
+          flows: {
+            MTD:  { fresh: 100000, topup: 50000, mandatePull: 50000, withdrawal: 25000 },
+            "30D":{ fresh: 100000, topup: 100000, mandatePull: 50000, withdrawal: 25000 },
+            FY26: { fresh: 550000, topup: 200000, mandatePull: 300000, withdrawal: 100000 },
+            ALL:  { fresh: 700000, topup: 250000, mandatePull: 450000, withdrawal: 350000 }
+          },
+          totalInitialAmount: 1400000,
+          currentValue: 685000,
+          netRepaidToBank: 850000,
+          netReturns: 135000,
+          growthPlanAUM: 485000,
+          emiPlanAUM: 200000,
+          xirr: 12.4,
+          activeLockins: 6,
+          mandate: {
+            status: "Active",
+            bank: "HDFC Bank •• 4821",
+            maxLimit: 100000,
+            pulledMTD: 50000,
+            pulledTotal: 450000
+          }
+        },
+        // 2. Estates (Aligned with Estates by PerAnnum.txt: SPV/LLP fractional residential ownership, appreciation-led exit, no monthly rent, no daily valuation before exit)
+        estates: {
+          invested: true,
+          capitalDeployed: 1500000,
+          estExitValue: 1845000,
+          potentialReturns: 345000,
+          targetRoiRange: "15-20%",
+          propertiesCount: 2,
+          dealStatus: "Active (Under Construction)",
+          properties: [
+            { name: "Emerald Residency, Mumbai (950 sq.ft Condo)", amount: 1000000, ownershipPct: "4.81%", paymentPlan: "CLP (40% Funded)", expectedTenure: "18 Months" },
+            { name: "Seafront View Residences, Worli", amount: 500000, ownershipPct: "2.41%", paymentPlan: "TLP (Initial Tranche)", expectedTenure: "24 Months" }
+          ]
+        },
+        // 3. NCDs (Aligned with NCD Portfolio Prototype: Amount Invested, Net Payouts Received Post-TDS, Pre-Tax XIRR, Payout Frequency, Next Payout Date, Maturity Date)
+        ncd: {
+          invested: true,
+          amountInvested: 1000000,
+          netPayoutsReceived: 68342,
+          xirrPreTax: 11.99,
+          payoutFreq: "Monthly",
+          nextPayoutDate: "10 Dec 2026",
+          nextPayoutNet: 8543,
+          maturityDate: "10 Aug 2027",
+          holdings: [
+            { name: "Cashtree NCD Series A", issuer: "Cashtree", amount: 1000000, couponRate: "11.39%", xirr: "11.99%", tenure: "18 Months", maturity: "10 Aug 2027" }
+          ]
+        }
+      },
+      {
+        userId: "1029104",
+        name: "Priya Nair",
+        phone: "+91 98201 77341",
+        email: "priya.nair@outlook.com",
+        joinedDate: "02 Jun 2025",
+        periodDeposits: { MTD: 175000, "30D": 175000, FY26: 1325000, ALL: 2075000 },
+        p2p: {
+          invested: true,
+          flows: {
+            MTD:  { fresh: 0, topup: 100000, mandatePull: 75000, withdrawal: 0 },
+            "30D":{ fresh: 0, topup: 100000, mandatePull: 75000, withdrawal: 0 },
+            FY26: { fresh: 300000, topup: 150000, mandatePull: 375000, withdrawal: 50000 },
+            ALL:  { fresh: 350000, topup: 200000, mandatePull: 525000, withdrawal: 205000 }
+          },
+          totalInitialAmount: 1075000,
+          currentValue: 540000,
+          netRepaidToBank: 645000,
+          netReturns: 110000,
+          growthPlanAUM: 390000,
+          emiPlanAUM: 150000,
+          xirr: 12.1,
+          activeLockins: 4,
+          mandate: {
+            status: "Active",
+            bank: "ICICI Bank •• 9012",
+            maxLimit: 150000,
+            pulledMTD: 75000,
+            pulledTotal: 525000
+          }
+        },
+        estates: {
+          invested: true,
+          capitalDeployed: 1000000,
+          estExitValue: 1210000,
+          potentialReturns: 210000,
+          targetRoiRange: "16-20%",
+          propertiesCount: 1,
+          dealStatus: "Active (Pre-Launch)",
+          properties: [
+            { name: "Emerald Residency, Mumbai (950 sq.ft Condo)", amount: 1000000, ownershipPct: "4.81%", paymentPlan: "CLP (20% Booking Funded)", expectedTenure: "18 Months" }
+          ]
+        },
+        ncd: {
+          invested: false,
+          amountInvested: 0,
+          netPayoutsReceived: 0,
+          xirrPreTax: 0,
+          payoutFreq: "-",
+          nextPayoutDate: "-",
+          nextPayoutNet: 0,
+          maturityDate: "-",
+          holdings: []
+        }
+      },
+      {
+        userId: "1031188",
+        name: "Vikramaditya Kulkarni",
+        phone: "+91 98230 11904",
+        email: "vkulkarni.pune@gmail.com",
+        joinedDate: "19 Jan 2025",
+        periodDeposits: { MTD: 0, "30D": 50000, FY26: 800000, ALL: 1800000 },
+        p2p: {
+          invested: true,
+          flows: {
+            MTD:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 150000 },
+            "30D":{ fresh: 0, topup: 50000, mandatePull: 0, withdrawal: 150000 },
+            FY26: { fresh: 200000, topup: 100000, mandatePull: 0, withdrawal: 250000 },
+            ALL:  { fresh: 600000, topup: 200000, mandatePull: 0, withdrawal: 240000 }
+          },
+          totalInitialAmount: 800000,
+          currentValue: 340000,
+          netRepaidToBank: 540000,
+          netReturns: 80000,
+          growthPlanAUM: 340000,
+          emiPlanAUM: 0,
+          xirr: 11.8,
+          activeLockins: 3,
+          mandate: {
+            status: "Not Created",
+            bank: "-",
+            maxLimit: 0,
+            pulledMTD: 0,
+            pulledTotal: 0
+          }
+        },
+        estates: {
+          invested: false,
+          capitalDeployed: 0,
+          estExitValue: 0,
+          potentialReturns: 0,
+          targetRoiRange: "-",
+          propertiesCount: 0,
+          dealStatus: "-",
+          properties: []
+        },
+        ncd: {
+          invested: true,
+          amountInvested: 1000000,
+          netPayoutsReceived: 64800,
+          xirrPreTax: 11.35,
+          payoutFreq: "Monthly",
+          nextPayoutDate: "15 Dec 2026",
+          nextPayoutNet: 8100,
+          maturityDate: "15 Feb 2028",
+          holdings: [
+            { name: "InCred Finance NCD Series B", issuer: "InCred Financial Services", amount: 1000000, couponRate: "10.80%", xirr: "11.35%", tenure: "24 Months", maturity: "15 Feb 2028" }
+          ]
+        }
+      },
+      {
+        userId: "1032490",
+        name: "Sneha Deshmukh",
+        phone: "+91 97654 33210",
+        email: "sneha.deshmukh@yahoo.in",
+        joinedDate: "11 Aug 2025",
+        periodDeposits: { MTD: 225000, "30D": 250000, FY26: 1200000, ALL: 1200000 },
+        p2p: {
+          invested: true,
+          flows: {
+            MTD:  { fresh: 100000, topup: 0, mandatePull: 25000, withdrawal: 0 },
+            "30D":{ fresh: 100000, topup: 25000, mandatePull: 25000, withdrawal: 0 },
+            FY26: { fresh: 250000, topup: 75000, mandatePull: 125000, withdrawal: 0 },
+            ALL:  { fresh: 250000, topup: 75000, mandatePull: 125000, withdrawal: 0 }
+          },
+          totalInitialAmount: 450000,
+          currentValue: 292000,
+          netRepaidToBank: 200000,
+          netReturns: 42000,
+          growthPlanAUM: 192000,
+          emiPlanAUM: 100000,
+          xirr: 12.0,
+          activeLockins: 2,
+          mandate: {
+            status: "Active",
+            bank: "Axis Bank •• 3319",
+            maxLimit: 50000,
+            pulledMTD: 25000,
+            pulledTotal: 125000
+          }
+        },
+        estates: {
+          invested: true,
+          capitalDeployed: 750000,
+          estExitValue: 885000,
+          potentialReturns: 135000,
+          targetRoiRange: "15-18%",
+          propertiesCount: 1,
+          dealStatus: "Active (Under Construction)",
+          properties: [
+            { name: "Koregaon Park Luxury Sky-Villas, Pune", amount: 750000, ownershipPct: "3.61%", paymentPlan: "CLP (40% Funded)", expectedTenure: "24 Months" }
+          ]
+        },
+        ncd: {
+          invested: false,
+          amountInvested: 0,
+          netPayoutsReceived: 0,
+          xirrPreTax: 0,
+          payoutFreq: "-",
+          nextPayoutDate: "-",
+          nextPayoutNet: 0,
+          maturityDate: "-",
+          holdings: []
+        }
+      },
+      {
+        userId: "1033902",
+        name: "Rohan Malhotra",
+        phone: "+91 98100 55412",
+        email: "rohan.malhotra@delhitech.in",
+        joinedDate: "28 Sep 2025",
+        periodDeposits: { MTD: 300000, "30D": 300000, FY26: 1300000, ALL: 1300000 },
+        p2p: {
+          invested: false,
+          flows: {
+            MTD:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 },
+            "30D":{ fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 },
+            FY26: { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 },
+            ALL:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 }
+          },
+          totalInitialAmount: 0,
+          currentValue: 0,
+          netRepaidToBank: 0,
+          netReturns: 0,
+          growthPlanAUM: 0,
+          emiPlanAUM: 0,
+          xirr: 0,
+          activeLockins: 0,
+          mandate: { status: "Not Created", bank: "-", maxLimit: 0, pulledMTD: 0, pulledTotal: 0 }
+        },
+        estates: {
+          invested: true,
+          capitalDeployed: 800000,
+          estExitValue: 960000,
+          potentialReturns: 160000,
+          targetRoiRange: "16-20%",
+          propertiesCount: 1,
+          dealStatus: "Exited (Proceeds Distributed)",
+          properties: [
+            { name: "Golf Course Road Residences, Gurugram", amount: 800000, ownershipPct: "3.85%", paymentPlan: "100% Settled", expectedTenure: "Exited at 18m" }
+          ]
+        },
+        ncd: {
+          invested: true,
+          amountInvested: 500000,
+          netPayoutsReceived: 32400,
+          xirrPreTax: 11.35,
+          payoutFreq: "Monthly",
+          nextPayoutDate: "15 Dec 2026",
+          nextPayoutNet: 4050,
+          maturityDate: "15 Feb 2028",
+          holdings: [
+            { name: "InCred Finance NCD Series B", issuer: "InCred Financial Services", amount: 500000, couponRate: "10.80%", xirr: "11.35%", tenure: "24 Months", maturity: "15 Feb 2028" }
+          ]
+        }
+      },
+      {
+        userId: "1034215",
+        name: "Ananya Chatterjee",
+        phone: "+91 98301 66789",
+        email: "ananya.c@kolkatamail.com",
+        joinedDate: "15 Oct 2025",
+        periodDeposits: { MTD: 95000, "30D": 95000, FY26: 600000, ALL: 600000 },
+        p2p: {
+          invested: true,
+          flows: {
+            MTD:  { fresh: 50000, topup: 25000, mandatePull: 20000, withdrawal: 0 },
+            "30D":{ fresh: 50000, topup: 25000, mandatePull: 20000, withdrawal: 0 },
+            FY26: { fresh: 150000, topup: 70000, mandatePull: 80000, withdrawal: 0 },
+            ALL:  { fresh: 150000, topup: 70000, mandatePull: 80000, withdrawal: 0 }
+          },
+          totalInitialAmount: 300000,
+          currentValue: 188000,
+          netRepaidToBank: 140000,
+          netReturns: 28000,
+          growthPlanAUM: 118000,
+          emiPlanAUM: 70000,
+          xirr: 11.9,
+          activeLockins: 2,
+          mandate: {
+            status: "Active",
+            bank: "SBI •• 1190",
+            maxLimit: 50000,
+            pulledMTD: 20000,
+            pulledTotal: 80000
+          }
+        },
+        estates: {
+          invested: false,
+          capitalDeployed: 0,
+          estExitValue: 0,
+          potentialReturns: 0,
+          targetRoiRange: "-",
+          propertiesCount: 0,
+          dealStatus: "-",
+          properties: []
+        },
+        ncd: {
+          invested: true,
+          amountInvested: 300000,
+          netPayoutsReceived: 32400,
+          xirrPreTax: 12.45,
+          payoutFreq: "Monthly",
+          nextPayoutDate: "Matured",
+          nextPayoutNet: 0,
+          maturityDate: "10 Jan 2026",
+          holdings: [
+            { name: "Northern Arc Capital NCD Series C", issuer: "Northern Arc Capital", amount: 300000, couponRate: "12.00%", xirr: "12.45%", tenure: "12 Months (Matured)", maturity: "10 Jan 2026" }
+          ]
+        }
+      },
+      {
+        userId: "1034899",
+        name: "Karthik Subramanian",
+        phone: "+91 94440 88213",
+        email: "karthik.sub@chennaicorp.in",
+        joinedDate: "03 Nov 2026",
+        periodDeposits: { MTD: 150000, "30D": 150000, FY26: 150000, ALL: 150000 },
+        p2p: {
+          invested: true,
+          flows: {
+            MTD:  { fresh: 150000, topup: 0, mandatePull: 0, withdrawal: 0 },
+            "30D":{ fresh: 150000, topup: 0, mandatePull: 0, withdrawal: 0 },
+            FY26: { fresh: 150000, topup: 0, mandatePull: 0, withdrawal: 0 },
+            ALL:  { fresh: 150000, topup: 0, mandatePull: 0, withdrawal: 0 }
+          },
+          totalInitialAmount: 150000,
+          currentValue: 151200,
+          netRepaidToBank: 0,
+          netReturns: 1200,
+          growthPlanAUM: 151200,
+          emiPlanAUM: 0,
+          xirr: 11.5,
+          activeLockins: 1,
+          mandate: {
+            status: "Not Created",
+            bank: "-",
+            maxLimit: 0,
+            pulledMTD: 0,
+            pulledTotal: 0
+          }
+        },
+        estates: {
+          invested: false,
+          capitalDeployed: 0,
+          estExitValue: 0,
+          potentialReturns: 0,
+          targetRoiRange: "-",
+          propertiesCount: 0,
+          dealStatus: "-",
+          properties: []
+        },
+        ncd: {
+          invested: false,
+          amountInvested: 0,
+          netPayoutsReceived: 0,
+          xirrPreTax: 0,
+          payoutFreq: "-",
+          nextPayoutDate: "-",
+          nextPayoutNet: 0,
+          maturityDate: "-",
+          holdings: []
+        }
+      },
+      {
+        userId: "1035053",
+        name: "Meera Joshi",
+        phone: "+91 98980 12098",
+        email: "meera.joshi@ahmedabad.org",
+        joinedDate: "14 Nov 2026",
+        periodDeposits: { MTD: 0, "30D": 0, FY26: 0, ALL: 0 },
+        p2p: {
+          invested: false,
+          flows: {
+            MTD:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 },
+            "30D":{ fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 },
+            FY26: { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 },
+            ALL:  { fresh: 0, topup: 0, mandatePull: 0, withdrawal: 0 }
+          },
+          totalInitialAmount: 0,
+          currentValue: 0,
+          netRepaidToBank: 0,
+          netReturns: 0,
+          growthPlanAUM: 0,
+          emiPlanAUM: 0,
+          xirr: 0,
+          activeLockins: 0,
+          mandate: { status: "Not Created", bank: "-", maxLimit: 0, pulledMTD: 0, pulledTotal: 0 }
+        },
+        estates: { invested: false, capitalDeployed: 0, estExitValue: 0, potentialReturns: 0, targetRoiRange: "-", propertiesCount: 0, dealStatus: "-", properties: [] },
+        ncd: { invested: false, amountInvested: 0, netPayoutsReceived: 0, xirrPreTax: 0, payoutFreq: "-", nextPayoutDate: "-", nextPayoutNet: 0, maturityDate: "-", holdings: [] }
+      }
+    ];
+
+    // App State
+    let currentTab = 'ALL'; // ALL | P2P | ESTATES | NCD
+    let currentPeriod = 'MTD'; // MTD | 30D | FY26 | ALL | CUSTOM
+    let activeFilter = 'all';
+
+    // Mobile Sidebar Toggle
+    function toggleMobileSidebar(open) {
+      const sb = document.getElementById('sidebar');
+      const bd = document.getElementById('mobileSidebarBackdrop');
+      if (open) {
+        sb.classList.remove('-translate-x-full');
+        bd.classList.remove('hidden');
+      } else {
+        sb.classList.add('-translate-x-full');
+        bd.classList.add('hidden');
+      }
+    }
+
+    // Currency Formatter
+    function formatINR(num, compact = false) {
+      if (num === null || num === undefined || isNaN(num)) return "₹ 0";
+      const sign = num < 0 ? "-" : "";
+      const abs = Math.abs(num);
+      if (compact) {
+        if (abs >= 10000000) return `${sign}₹ ${(abs / 10000000).toFixed(2)} Cr`;
+        if (abs >= 100000) return `${sign}₹ ${(abs / 100000).toFixed(2)} L`;
+      }
+      return `${sign}₹ ${abs.toLocaleString('en-IN')}`;
+    }
+
+    // Universal Aggregation Helpers
+    // Active value = P2P current active loans + Estates active capital deployed (if not exited) + NCD active invested principal (if not matured)
+    function getInvestorActiveValue(inv) {
+      const estatesActive = (inv.estates.invested && !inv.estates.dealStatus.startsWith('Exited')) ? inv.estates.capitalDeployed : 0;
+      const ncdActive = (inv.ncd.invested && inv.ncd.nextPayoutDate !== 'Matured') ? inv.ncd.amountInvested : 0;
+      return inv.p2p.currentValue + estatesActive + ncdActive;
+    }
+
+    // Realised Returns across products = P2P Net Returns + NCD Net Payouts Received + Estates Realised Profit (if exited)
+    function getInvestorRealisedReturns(inv) {
+      const estatesRealised = (inv.estates.invested && inv.estates.dealStatus.startsWith('Exited')) ? inv.estates.potentialReturns : 0;
+      return inv.p2p.netReturns + inv.ncd.netPayoutsReceived + estatesRealised;
+    }
+
+    function getAllProductsDeposits(inv) {
+      const key = currentPeriod === 'CUSTOM' ? 'MTD' : currentPeriod;
+      return inv.periodDeposits[key] || 0;
+    }
+
+    function getP2PNetDeposit(inv) {
+      const key = currentPeriod === 'CUSTOM' ? 'MTD' : currentPeriod;
+      const f = inv.p2p.flows[key];
+      return (f.fresh + f.topup + f.mandatePull) - f.withdrawal;
+    }
+
+    function getPeriodLabel() {
+      const map = {
+        MTD: 'MTD',
+        '30D': 'Last 30d',
+        FY26: 'FY 26-27',
+        ALL: 'All Time',
+        CUSTOM: 'Custom'
+      };
+      return map[currentPeriod] || 'MTD';
+    }
+
+    // Period Switching
+    function setPeriod(period, btnEl) {
+      currentPeriod = period;
+      document.getElementById('customDateInputs').classList.add('hidden');
+      document.getElementById('customDateInputs').classList.remove('flex');
+      document.querySelectorAll('.period-btn').forEach(b => {
+        b.classList.remove('bg-brand-blue', 'text-white');
+        b.classList.add('text-slate-600');
+      });
+      if (btnEl) {
+        btnEl.classList.add('bg-brand-blue', 'text-white');
+        btnEl.classList.remove('text-slate-600');
+      }
+      renderDashboard();
+    }
+
+    function toggleCustomDate() {
+      currentPeriod = 'CUSTOM';
+      document.querySelectorAll('.period-btn').forEach(b => {
+        b.classList.remove('bg-brand-blue', 'text-white');
+        b.classList.add('text-slate-600');
+      });
+      const btn = document.getElementById('customDateBtn');
+      btn.classList.add('bg-brand-blue', 'text-white');
+      btn.classList.remove('text-slate-600');
+
+      const box = document.getElementById('customDateInputs');
+      box.classList.remove('hidden');
+      box.classList.add('flex');
+    }
+
+    function applyCustomDate() {
+      const s = document.getElementById('startDate').value;
+      const e = document.getElementById('endDate').value;
+      openToast(`Showing data from ${s} to ${e}`);
+      renderDashboard();
+    }
+
+    // Product Tab Switching
+    function switchProductTab(tab) {
+      currentTab = tab;
+      activeFilter = 'all';
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const isTarget = btn.getAttribute('data-tab') === tab;
+        btn.classList.toggle('border-brand-blue', isTarget);
+        btn.classList.toggle('text-brand-blue', isTarget);
+        btn.classList.toggle('font-semibold', isTarget);
+        btn.classList.toggle('border-transparent', !isTarget);
+        btn.classList.toggle('text-slate-600', !isTarget);
+        btn.classList.toggle('font-medium', !isTarget);
+      });
+
+      const contextMap = {
+        ALL: 'Combined overview of deposits, active portfolio value, and realised returns across P2P Edge, Estates, and NCDs.',
+        P2P: 'P2P Edge portfolio: Growth and Monthly EMI split, net deposits, net repaid to bank, net returns, and auto-debit mandate status.',
+        ESTATES: 'Estates fractional real estate: Capital deployed in SPV/LLP deals, ownership share, payment plan status, and target ROI (appreciation-led exit).',
+        NCD: 'NCDs and Bonds portfolio: Invested principal, net payouts received (post-TDS), pre-tax XIRR, and upcoming payout dates.'
+      };
+      document.getElementById('tabContextText').textContent = contextMap[tab];
+
+      const downloadLabels = {
+        ALL: 'Download All Products List',
+        P2P: 'Download P2P Edge List',
+        ESTATES: 'Download Estates List',
+        NCD: 'Download NCDs List'
+      };
+      document.getElementById('downloadBtnLabel').textContent = downloadLabels[tab];
+
+      setupTabControls();
+      renderDashboard();
+    }
+
+    // Setup Context-Aware Filter Chips & Sort Options per Product Tab
+    function setupTabControls() {
+      const chipContainer = document.getElementById('dynamicFilterChips');
+      const sortSelect = document.getElementById('sortSelect');
+
+      if (currentTab === 'ALL') {
+        chipContainer.innerHTML = `
+          <button onclick="setQuickFilter('all')" id="qf-all" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-white transition">All Investors</button>
+          <button onclick="setQuickFilter('active_only')" id="qf-active_only" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">Active Holdings</button>
+          <button onclick="setQuickFilter('multi_product')" id="qf-multi_product" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">2+ Products</button>
+        `;
+        sortSelect.innerHTML = `
+          <option value="val_desc">Current Value (High to Low)</option>
+          <option value="dep_desc">Total Deposits (High to Low)</option>
+          <option value="ret_desc">Net Returns (High to Low)</option>
+          <option value="name_asc">Investor Name (A-Z)</option>
+        `;
+      } else if (currentTab === 'P2P') {
+        chipContainer.innerHTML = `
+          <button onclick="setQuickFilter('all')" id="qf-all" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-white transition">All P2P</button>
+          <button onclick="setQuickFilter('mandate_active')" id="qf-mandate_active" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">Mandate Active</button>
+          <button onclick="setQuickFilter('mandate_missing')" id="qf-mandate_missing" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">No Mandate</button>
+        `;
+        sortSelect.innerHTML = `
+          <option value="val_desc">Current Value (High to Low)</option>
+          <option value="dep_desc">Net Deposit (High to Low)</option>
+          <option value="ret_desc">Net Returns (High to Low)</option>
+          <option value="pulled_desc">Pulled via Mandate (High to Low)</option>
+          <option value="name_asc">Investor Name (A-Z)</option>
+        `;
+      } else if (currentTab === 'ESTATES') {
+        chipContainer.innerHTML = `
+          <button onclick="setQuickFilter('all')" id="qf-all" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-white transition">All Estates</button>
+          <button onclick="setQuickFilter('estates_active')" id="qf-estates_active" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">Active Deals</button>
+          <button onclick="setQuickFilter('estates_exited')" id="qf-estates_exited" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">Exited</button>
+        `;
+        sortSelect.innerHTML = `
+          <option value="dep_desc">Capital Deployed (High to Low)</option>
+          <option value="val_desc">Est. Exit Value (High to Low)</option>
+          <option value="name_asc">Investor Name (A-Z)</option>
+        `;
+      } else if (currentTab === 'NCD') {
+        chipContainer.innerHTML = `
+          <button onclick="setQuickFilter('all')" id="qf-all" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-white transition">All NCDs</button>
+          <button onclick="setQuickFilter('ncd_active')" id="qf-ncd_active" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">Active Bonds</button>
+          <button onclick="setQuickFilter('ncd_matured')" id="qf-ncd_matured" class="qf-btn px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200/70 transition">Matured</button>
+        `;
+        sortSelect.innerHTML = `
+          <option value="dep_desc">Amount Invested (High to Low)</option>
+          <option value="ret_desc">Net Payouts Received (High to Low)</option>
+          <option value="name_asc">Investor Name (A-Z)</option>
+        `;
+      }
+    }
+
+    function setQuickFilter(filterKey) {
+      activeFilter = filterKey;
+      document.querySelectorAll('.qf-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-600');
+      });
+      const target = document.getElementById(`qf-${filterKey}`);
+      if (target) {
+        target.classList.remove('bg-slate-100', 'text-slate-600');
+        target.classList.add('bg-slate-900', 'text-white');
+      }
+      renderTable();
+    }
+
+    function handleGlobalSearch(val) {
+      document.getElementById('tableSearchInput').value = val;
+      renderTable();
+    }
+
+    function resetFilters() {
+      document.getElementById('tableSearchInput').value = '';
+      document.getElementById('globalQuickSearch').value = '';
+      setQuickFilter('all');
+    }
+
+    // Filter + Sort Data
+    function getFilteredInvestors() {
+      const q = document.getElementById('tableSearchInput').value.trim().toLowerCase();
+      const sortBy = document.getElementById('sortSelect').value;
+
+      let list = investorsData.filter(inv => {
+        if (currentTab === 'P2P' && !inv.p2p.invested) return false;
+        if (currentTab === 'ESTATES' && !inv.estates.invested) return false;
+        if (currentTab === 'NCD' && !inv.ncd.invested) return false;
+
+        if (q) {
+          const match = inv.name.toLowerCase().includes(q) ||
+                        inv.userId.toLowerCase().includes(q) ||
+                        inv.phone.toLowerCase().includes(q);
+          if (!match) return false;
+        }
+
+        if (currentTab === 'ALL') {
+          if (activeFilter === 'active_only' && getInvestorActiveValue(inv) <= 0) return false;
+          if (activeFilter === 'multi_product') {
+            const count = (inv.p2p.invested ? 1 : 0) + (inv.estates.invested ? 1 : 0) + (inv.ncd.invested ? 1 : 0);
+            if (count < 2) return false;
+          }
+        } else if (currentTab === 'P2P') {
+          if (activeFilter === 'mandate_active' && inv.p2p.mandate.status !== 'Active') return false;
+          if (activeFilter === 'mandate_missing' && inv.p2p.mandate.status === 'Active') return false;
+        } else if (currentTab === 'ESTATES') {
+          if (activeFilter === 'estates_active' && inv.estates.dealStatus.startsWith('Exited')) return false;
+          if (activeFilter === 'estates_exited' && !inv.estates.dealStatus.startsWith('Exited')) return false;
+        } else if (currentTab === 'NCD') {
+          if (activeFilter === 'ncd_active' && inv.ncd.nextPayoutDate === 'Matured') return false;
+          if (activeFilter === 'ncd_matured' && inv.ncd.nextPayoutDate !== 'Matured') return false;
+        }
+
+        return true;
+      });
+
+      list.sort((a, b) => {
+        if (sortBy === 'name_asc') return a.name.localeCompare(b.name);
+
+        if (currentTab === 'ALL') {
+          if (sortBy === 'val_desc') return getInvestorActiveValue(b) - getInvestorActiveValue(a);
+          if (sortBy === 'dep_desc') return getAllProductsDeposits(b) - getAllProductsDeposits(a);
+          if (sortBy === 'ret_desc') return getInvestorRealisedReturns(b) - getInvestorRealisedReturns(a);
+        } else if (currentTab === 'P2P') {
+          if (sortBy === 'val_desc') return b.p2p.currentValue - a.p2p.currentValue;
+          if (sortBy === 'dep_desc') return getP2PNetDeposit(b) - getP2PNetDeposit(a);
+          if (sortBy === 'ret_desc') return b.p2p.netReturns - a.p2p.netReturns;
+          if (sortBy === 'pulled_desc') return b.p2p.mandate.pulledTotal - a.p2p.mandate.pulledTotal;
+        } else if (currentTab === 'ESTATES') {
+          if (sortBy === 'dep_desc') return b.estates.capitalDeployed - a.estates.capitalDeployed;
+          if (sortBy === 'val_desc') return b.estates.estExitValue - a.estates.estExitValue;
+        } else if (currentTab === 'NCD') {
+          if (sortBy === 'dep_desc') return b.ncd.amountInvested - a.ncd.amountInvested;
+          if (sortBy === 'ret_desc') return b.ncd.netPayoutsReceived - a.ncd.netPayoutsReceived;
+        }
+        return 0;
+      });
+
+      return list;
+    }
+
+    // Render KPI Cards (Strictly applicable to selected product scope)
+    function renderKPIs() {
+      const strip = document.getElementById('kpiStrip');
+      const pLabel = getPeriodLabel();
+
+      if (currentTab === 'ALL') {
+        const totalActiveValue = investorsData.reduce((s, i) => s + getInvestorActiveValue(i), 0);
+        const totalDeposits = investorsData.reduce((s, i) => s + getAllProductsDeposits(i), 0);
+        const totalRealisedReturns = investorsData.reduce((s, i) => s + getInvestorRealisedReturns(i), 0);
+        const activeInvestors = investorsData.filter(i => getInvestorActiveValue(i) > 0).length;
+
+        strip.innerHTML = `
+          <div class="hero-card-gradient text-white rounded-xl p-5 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <i data-lucide="wallet" class="w-4 h-4 text-blue-300"></i>
+              </div>
+              <span class="text-[11px] bg-white/10 text-blue-200 px-2 py-0.5 rounded-full font-medium">All Products</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-2xl font-bold tracking-tight">${formatINR(totalActiveValue, true)}</div>
+              <div class="text-xs text-slate-300 mt-0.5">Active Current Value (${formatINR(totalActiveValue)})</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-500">Total Deposits (${pLabel})</span>
+              <i data-lucide="arrow-down-left" class="w-4 h-4 text-brand-blue"></i>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-slate-900">${formatINR(totalDeposits)}</div>
+              <div class="text-[11px] text-slate-400 mt-1">Across P2P Edge, Estates & NCDs</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-500">Net Returns Realised</span>
+              <i data-lucide="trending-up" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-emerald-700">+${formatINR(totalRealisedReturns)}</div>
+              <div class="text-[11px] text-slate-400 mt-1">Realised gains & payouts to date</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-500">Active Investors</span>
+              <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-slate-900">${activeInvestors} <span class="text-sm font-normal text-slate-400">/ ${investorsData.length}</span></div>
+              <div class="text-[11px] text-slate-400 mt-1">Holding at least one active deal</div>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === 'P2P') {
+        const list = investorsData.filter(i => i.p2p.invested);
+        const p2pCurrentVal = list.reduce((s, i) => s + i.p2p.currentValue, 0);
+        const netDep = list.reduce((s, i) => s + getP2PNetDeposit(i), 0);
+        const netRepaid = list.reduce((s, i) => s + i.p2p.netRepaidToBank, 0);
+        const profit = list.reduce((s, i) => s + i.p2p.netReturns, 0);
+        const pulled = list.reduce((s, i) => s + (currentPeriod === 'MTD' ? i.p2p.mandate.pulledMTD : i.p2p.mandate.pulledTotal), 0);
+        const activeMandates = list.filter(i => i.p2p.mandate.status === 'Active').length;
+
+        strip.innerHTML = `
+          <div class="hero-card-gradient text-white rounded-xl p-5 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-blue-200 font-medium">P2P Current Value</span>
+              <span class="text-[11px] bg-white/10 px-2 py-0.5 rounded-full">${list.length} Investors</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-2xl font-bold">${formatINR(p2pCurrentVal, true)}</div>
+              <div class="text-[11px] text-slate-300 mt-1">Active capital in ongoing loans</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">${pLabel} Net Deposit</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold ${netDep >= 0 ? 'text-slate-900' : 'text-rose-600'}">
+                ${netDep > 0 ? '+' : ''}${formatINR(netDep)}
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">Deposits + Pulls minus Withdrawals</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Net Returns (Profit)</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-emerald-700">+${formatINR(profit)}</div>
+              <div class="text-[11px] text-slate-400 mt-1">Net Repaid to Bank: ${formatINR(netRepaid, true)}</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-500">Pulled via Mandate</span>
+              <span class="text-[10px] font-semibold bg-blue-50 text-brand-blue px-2 py-0.5 rounded-full">${activeMandates}/${list.length} Active</span>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-slate-900">${formatINR(pulled)}</div>
+              <div class="text-[11px] text-slate-400 mt-1">${currentPeriod === 'MTD' ? 'Pulled this month' : 'Cumulative auto-pulls'}</div>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === 'ESTATES') {
+        const list = investorsData.filter(i => i.estates.invested);
+        const capDeployed = list.reduce((s, i) => s + i.estates.capitalDeployed, 0);
+        const estExitVal = list.reduce((s, i) => s + i.estates.estExitValue, 0);
+        const potReturns = list.reduce((s, i) => s + i.estates.potentialReturns, 0);
+
+        strip.innerHTML = `
+          <div class="hero-card-gradient text-white rounded-xl p-5 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-blue-200 font-medium">Capital Deployed</span>
+              <span class="text-[11px] bg-white/10 px-2 py-0.5 rounded-full">${list.length} Investors</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-2xl font-bold">${formatINR(capDeployed, true)}</div>
+              <div class="text-[11px] text-slate-300 mt-1">Invested across SPV/LLP units</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Projected Exit Value</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-slate-900">${formatINR(estExitVal, true)}</div>
+              <div class="text-[11px] text-slate-400 mt-1">Based on deal target appreciation</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Projected / Realised Gain</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-emerald-700">+${formatINR(potReturns)}</div>
+              <div class="text-[11px] text-slate-400 mt-1">Appreciation-led exit at sale</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Target ROI Band</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-brand-blue">15% - 20%</div>
+              <div class="text-[11px] text-slate-400 mt-1">15% Hurdle rate before carry</div>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === 'NCD') {
+        const list = investorsData.filter(i => i.ncd.invested);
+        const activeList = list.filter(i => i.ncd.nextPayoutDate !== 'Matured');
+        const activeCap = activeList.reduce((s, i) => s + i.ncd.amountInvested, 0);
+        const totalInv = list.reduce((s, i) => s + i.ncd.amountInvested, 0);
+        const netRecd = list.reduce((s, i) => s + i.ncd.netPayoutsReceived, 0);
+
+        strip.innerHTML = `
+          <div class="hero-card-gradient text-white rounded-xl p-5 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-blue-200 font-medium">Active Bond Capital</span>
+              <span class="text-[11px] bg-white/10 px-2 py-0.5 rounded-full">${activeList.length} Active / ${list.length} Total</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-2xl font-bold">${formatINR(activeCap, true)}</div>
+              <div class="text-[11px] text-slate-300 mt-1">Total Invested (All): ${formatINR(totalInv, true)}</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Net Received (Post-TDS)</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-emerald-700">+${formatINR(netRecd)}</div>
+              <div class="text-[11px] text-slate-400 mt-1">Credited after 10% TDS on interest</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Weighted Avg. XIRR</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-brand-blue">11.78% p.a.</div>
+              <div class="text-[11px] text-slate-400 mt-1">Annualised pre-tax yield</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col justify-between">
+            <span class="text-xs font-medium text-slate-500">Payout Schedule</span>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-slate-900">Monthly</div>
+              <div class="text-[11px] text-slate-400 mt-1">Direct bank credit on schedule</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Render Product-Tailored Table
+    function renderTable() {
+      const list = getFilteredInvestors();
+      const thead = document.getElementById('tableHead');
+      const tbody = document.getElementById('tableBody');
+      const emptyState = document.getElementById('emptyState');
+      const footerNote = document.getElementById('footerFormulaNote');
+      const pLabel = getPeriodLabel();
+
+      const totalCount = currentTab === 'ALL' ? investorsData.length :
+                         currentTab === 'P2P' ? investorsData.filter(i => i.p2p.invested).length :
+                         currentTab === 'ESTATES' ? investorsData.filter(i => i.estates.invested).length :
+                         investorsData.filter(i => i.ncd.invested).length;
+
+      document.getElementById('paginationInfo').textContent = `Showing ${list.length} of ${totalCount} investors`;
+
+      if (list.length === 0) {
+        thead.innerHTML = '';
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      // 1. ALL PRODUCTS (Only universal columns: User ID, Investor Name, Product(s), Total Deposits, Current Value, Net Returns, Action)
+      if (currentTab === 'ALL') {
+        footerNote.textContent = 'Click any investor row to view product-wise breakdown and download client statements.';
+        thead.innerHTML = `
+          <tr>
+            <th class="py-3.5 px-4">User ID</th>
+            <th class="py-3.5 px-4">Investor Name</th>
+            <th class="py-3.5 px-4">Product(s)</th>
+            <th class="py-3.5 px-4 text-right">Total Deposits (${pLabel})</th>
+            <th class="py-3.5 px-4 text-right">Current Value</th>
+            <th class="py-3.5 px-4 text-right">Net Returns</th>
+            <th class="py-3.5 px-4 text-right">Action</th>
+          </tr>
+        `;
+
+        tbody.innerHTML = list.map(inv => {
+          const totalDep = getAllProductsDeposits(inv);
+          const activeVal = getInvestorActiveValue(inv);
+          const realisedRet = getInvestorRealisedReturns(inv);
+
+          return `
+            <tr onclick="openInvestorDrawer('${inv.userId}')" class="hover:bg-blue-50/40 cursor-pointer transition group">
+              <td class="py-3.5 px-4 font-mono text-slate-600 font-medium whitespace-nowrap">
+                ${inv.userId}
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <div class="font-semibold text-brand-blue group-hover:underline">${inv.name}</div>
+                <div class="text-[11px] text-slate-400">${inv.phone}</div>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <div class="flex flex-wrap gap-1.5">
+                  ${inv.p2p.invested ? `<span class="px-2 py-0.5 rounded bg-blue-50 text-brand-blue text-[11px] font-semibold">P2P Edge</span>` : ''}
+                  ${inv.estates.invested ? `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[11px] font-semibold">Estates</span>` : ''}
+                  ${inv.ncd.invested ? `<span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 text-[11px] font-semibold">NCDs</span>` : ''}
+                  ${(!inv.p2p.invested && !inv.estates.invested && !inv.ncd.invested) ? `<span class="text-slate-400 text-[11px]">None yet</span>` : ''}
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-right font-medium text-slate-700 whitespace-nowrap">
+                ${formatINR(totalDep)}
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900 whitespace-nowrap">
+                ${formatINR(activeVal)}
+              </td>
+              <td class="py-3.5 px-4 text-right font-semibold text-emerald-700 whitespace-nowrap">
+                +${formatINR(realisedRet)}
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <button onclick="event.stopPropagation(); openInvestorDrawer('${inv.userId}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-brand-blue hover:bg-blue-50 transition">
+                  <span>View</span>
+                  <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 2. P2P EDGE TAB (Aligned with P2P Edge Portfolio Prototype + Mandate tracking)
+      else if (currentTab === 'P2P') {
+        footerNote.innerHTML = '<strong>Net Deposit Formula:</strong> Fresh + Top-ups + Mandate Pulls minus Withdrawals. <strong>Current Value:</strong> Active money working in ongoing loans.';
+        thead.innerHTML = `
+          <tr>
+            <th class="py-3.5 px-4">User ID</th>
+            <th class="py-3.5 px-4">Investor Name</th>
+            <th class="py-3.5 px-4 text-right">${pLabel} Net Deposit</th>
+            <th class="py-3.5 px-4 text-right">Current Value</th>
+            <th class="py-3.5 px-4 text-right">Net Repaid to Bank</th>
+            <th class="py-3.5 px-4 text-right">Net Returns (XIRR)</th>
+            <th class="py-3.5 px-4">Mandate Status</th>
+            <th class="py-3.5 px-4 text-right">Pulled via Mandate</th>
+            <th class="py-3.5 px-4 text-right">Action</th>
+          </tr>
+        `;
+
+        tbody.innerHTML = list.map(inv => {
+          const p = inv.p2p;
+          const netDep = getP2PNetDeposit(inv);
+          const pulledDisplay = currentPeriod === 'MTD' ? p.mandate.pulledMTD : p.mandate.pulledTotal;
+
+          const mandateBadge = p.mandate.status === 'Active'
+            ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Active</span>`
+            : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600">Not Created</span>`;
+
+          return `
+            <tr onclick="openInvestorDrawer('${inv.userId}')" class="hover:bg-blue-50/40 cursor-pointer transition group">
+              <td class="py-3.5 px-4 font-mono text-slate-600 font-medium whitespace-nowrap">${inv.userId}</td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <div class="font-semibold text-brand-blue group-hover:underline">${inv.name}</div>
+                <div class="text-[11px] text-slate-400">Growth: ${formatINR(p.growthPlanAUM)} • EMI: ${formatINR(p.emiPlanAUM)}</div>
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <span class="font-semibold ${netDep > 0 ? 'text-emerald-700' : netDep < 0 ? 'text-rose-600' : 'text-slate-600'}">
+                  ${netDep > 0 ? '+' : ''}${formatINR(netDep)}
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900 whitespace-nowrap">${formatINR(p.currentValue)}</td>
+              <td class="py-3.5 px-4 text-right font-medium text-slate-700 whitespace-nowrap">${formatINR(p.netRepaidToBank)}</td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <div class="font-semibold text-emerald-700">+${formatINR(p.netReturns)}</div>
+                <div class="text-[10px] text-slate-400">Avg. XIRR ${p.xirr}%</div>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                ${mandateBadge}
+                ${p.mandate.status === 'Active' ? `<div class="text-[10px] text-slate-400 mt-0.5">Limit: ${formatINR(p.mandate.maxLimit)}</div>` : ''}
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <div class="font-semibold text-slate-800">${formatINR(pulledDisplay)}</div>
+                <div class="text-[10px] text-slate-400">Total: ${formatINR(p.mandate.pulledTotal)}</div>
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <button onclick="event.stopPropagation(); openInvestorDrawer('${inv.userId}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-brand-blue hover:bg-blue-50 transition">
+                  <span>View</span>
+                  <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 3. ESTATES TAB (Aligned with Estates by PerAnnum.txt: Capital Deployed, SPV/LLP Property & Ownership %, Payment Plan, Target ROI, Deal Lifecycle Status)
+      else if (currentTab === 'ESTATES') {
+        footerNote.textContent = 'Estates is an appreciation-led SPV/LLP model. Net proceeds are distributed upon property resale after expenses and 15% hurdle rate.';
+        thead.innerHTML = `
+          <tr>
+            <th class="py-3.5 px-4">User ID</th>
+            <th class="py-3.5 px-4">Investor Name</th>
+            <th class="py-3.5 px-4 text-right">Capital Deployed</th>
+            <th class="py-3.5 px-4">Property & Ownership Share</th>
+            <th class="py-3.5 px-4">Payment Plan</th>
+            <th class="py-3.5 px-4 text-center">Target ROI</th>
+            <th class="py-3.5 px-4 text-right">Projected / Exit Value</th>
+            <th class="py-3.5 px-4">Deal Status</th>
+            <th class="py-3.5 px-4 text-right">Action</th>
+          </tr>
+        `;
+
+        tbody.innerHTML = list.map(inv => {
+          const e = inv.estates;
+          const primaryProp = e.properties[0];
+          const isExited = e.dealStatus.startsWith('Exited');
+
+          return `
+            <tr onclick="openInvestorDrawer('${inv.userId}')" class="hover:bg-blue-50/40 cursor-pointer transition group">
+              <td class="py-3.5 px-4 font-mono text-slate-600 font-medium whitespace-nowrap">${inv.userId}</td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <div class="font-semibold text-brand-blue group-hover:underline">${inv.name}</div>
+                <div class="text-[11px] text-slate-400">${e.propertiesCount} ${e.propertiesCount > 1 ? 'Properties' : 'Property'}</div>
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900 whitespace-nowrap">${formatINR(e.capitalDeployed)}</td>
+              <td class="py-3.5 px-4">
+                <div class="font-medium text-slate-800 truncate max-w-[220px]">${primaryProp?.name || '-'}</div>
+                <div class="text-[11px] text-brand-blue font-semibold">Unit Share: ${primaryProp?.ownershipPct || '-'}</div>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <span class="text-xs text-slate-700 font-medium">${primaryProp?.paymentPlan || '-'}</span>
+                <div class="text-[10px] text-slate-400">Tenure: ${primaryProp?.expectedTenure || '-'}</div>
+              </td>
+              <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                <span class="px-2 py-0.5 rounded bg-blue-50 text-brand-blue font-semibold text-[11px]">${e.targetRoiRange}</span>
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <div class="font-semibold text-slate-800">${formatINR(e.estExitValue)}</div>
+                <div class="text-[10px] font-semibold text-emerald-700">+${formatINR(e.potentialReturns)} ${isExited ? 'Realised' : 'Est. Gain'}</div>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isExited ? 'bg-slate-200 text-slate-700' : 'bg-emerald-50 text-emerald-700'}">
+                  ${e.dealStatus}
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <button onclick="event.stopPropagation(); openInvestorDrawer('${inv.userId}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-brand-blue hover:bg-blue-50 transition">
+                  <span>View</span>
+                  <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 4. NCDs TAB (Aligned with NCD Portfolio Prototype: Amount Invested, Net Payouts Received Post-TDS, XIRR Pre-Tax, Payout Type, Next Payout Date, Maturity Date)
+      else if (currentTab === 'NCD') {
+        footerNote.textContent = 'Net Payouts Received are post 10% TDS on the interest component. Full principal is returned on Maturity Date.';
+        thead.innerHTML = `
+          <tr>
+            <th class="py-3.5 px-4">User ID</th>
+            <th class="py-3.5 px-4">Investor Name</th>
+            <th class="py-3.5 px-4">NCD Series & Issuer</th>
+            <th class="py-3.5 px-4 text-right">Amount Invested</th>
+            <th class="py-3.5 px-4 text-right">Net Received (Post-TDS)</th>
+            <th class="py-3.5 px-4 text-center">XIRR (Pre-Tax)</th>
+            <th class="py-3.5 px-4">Next Payout</th>
+            <th class="py-3.5 px-4">Maturity Date</th>
+            <th class="py-3.5 px-4 text-right">Action</th>
+          </tr>
+        `;
+
+        tbody.innerHTML = list.map(inv => {
+          const n = inv.ncd;
+          const primaryBond = n.holdings[0];
+          const isMatured = n.nextPayoutDate === 'Matured';
+
+          return `
+            <tr onclick="openInvestorDrawer('${inv.userId}')" class="hover:bg-blue-50/40 cursor-pointer transition group">
+              <td class="py-3.5 px-4 font-mono text-slate-600 font-medium whitespace-nowrap">${inv.userId}</td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <div class="font-semibold text-brand-blue group-hover:underline">${inv.name}</div>
+                <div class="text-[11px] text-slate-400">Payout: ${n.payoutFreq}</div>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <div class="font-medium text-slate-800">${primaryBond?.name || '-'}</div>
+                <div class="text-[10px] text-slate-400">Issuer: ${primaryBond?.issuer || '-'} (${primaryBond?.couponRate || ''} Coupon)</div>
+              </td>
+              <td class="py-3.5 px-4 text-right font-bold text-slate-900 whitespace-nowrap">${formatINR(n.amountInvested)}</td>
+              <td class="py-3.5 px-4 text-right font-semibold text-emerald-700 whitespace-nowrap">+${formatINR(n.netPayoutsReceived)}</td>
+              <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                <span class="px-2 py-0.5 rounded bg-blue-50 text-brand-blue font-bold text-[11px]">${n.xirrPreTax}% p.a.</span>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                ${isMatured
+                  ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-200 text-slate-700">Closed (Matured)</span>`
+                  : `<div class="font-semibold text-slate-800">${formatINR(n.nextPayoutNet)}</div><div class="text-[10px] text-slate-400">On ${n.nextPayoutDate}</div>`
+                }
+              </td>
+              <td class="py-3.5 px-4 font-medium text-slate-700 whitespace-nowrap">${n.maturityDate}</td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <button onclick="event.stopPropagation(); openInvestorDrawer('${inv.userId}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-brand-blue hover:bg-blue-50 transition">
+                  <span>View</span>
+                  <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      lucide.createIcons();
+    }
+
+    function applyFilters() {
+      renderTable();
+    }
+
+    function renderDashboard() {
+      document.getElementById('count-ALL').textContent = investorsData.length;
+      document.getElementById('count-P2P').textContent = investorsData.filter(i => i.p2p.invested).length;
+      document.getElementById('count-ESTATES').textContent = investorsData.filter(i => i.estates.invested).length;
+      document.getElementById('count-NCD').textContent = investorsData.filter(i => i.ncd.invested).length;
+
+      renderKPIs();
+      renderTable();
+      lucide.createIcons();
+    }
+
+    // Slide-Over Investor Drawer
+    function openInvestorDrawer(userId) {
+      const inv = investorsData.find(i => i.userId === userId);
+      if (!inv) return;
+
+      const initials = inv.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+      document.getElementById('drawerAvatar').textContent = initials;
+      document.getElementById('drawerName').textContent = inv.name;
+      document.getElementById('drawerUserId').textContent = inv.userId;
+      document.getElementById('drawerContact').textContent = `${inv.phone} • ${inv.email}`;
+
+      const activeVal = getInvestorActiveValue(inv);
+      const realisedRet = getInvestorRealisedReturns(inv);
+      const totalDep = getAllProductsDeposits(inv);
+      const periodKey = currentPeriod === 'CUSTOM' ? 'MTD' : currentPeriod;
+      const p2pFlow = inv.p2p.flows[periodKey];
+      const p2pNetDep = getP2PNetDeposit(inv);
+
+      document.getElementById('drawerContent').innerHTML = `
+        <!-- Overall Portfolio Snapshot -->
+        <div class="grid grid-cols-3 gap-2.5 sm:gap-3">
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-[11px] text-slate-500 font-medium">Active Current Value</div>
+            <div class="text-base sm:text-lg font-bold text-slate-900 mt-1">${formatINR(activeVal)}</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-[11px] text-slate-500 font-medium">Net Returns Realised</div>
+            <div class="text-base sm:text-lg font-bold text-emerald-700 mt-1">+${formatINR(realisedRet)}</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-[11px] text-slate-500 font-medium">Deposits (${getPeriodLabel()})</div>
+            <div class="text-base sm:text-lg font-bold text-brand-blue mt-1">${formatINR(totalDep)}</div>
+          </div>
+        </div>
+
+        <!-- Product 1: P2P Edge -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-white space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-blue"></span>
+              <span class="font-bold text-xs text-slate-900">P2P Edge</span>
+            </div>
+            <span class="font-bold text-sm text-slate-900">${formatINR(inv.p2p.currentValue)}</span>
+          </div>
+
+          ${inv.p2p.invested ? `
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2.5 border-t border-slate-100 text-xs">
+              <div>
+                <span class="text-slate-400 text-[10px] block">Net Repaid to Bank</span>
+                <span class="font-semibold text-slate-800">${formatINR(inv.p2p.netRepaidToBank)}</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] block">Net Returns (Profit)</span>
+                <span class="font-semibold text-emerald-700">+${formatINR(inv.p2p.netReturns)} (${inv.p2p.xirr}% XIRR)</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] block">${getPeriodLabel()} Net Deposit</span>
+                <span class="font-semibold ${p2pNetDep >= 0 ? 'text-slate-800' : 'text-rose-600'}">${p2pNetDep > 0 ? '+' : ''}${formatINR(p2pNetDep)}</span>
+              </div>
+            </div>
+
+            <!-- P2P Cashflow & Mandate Strip -->
+            <div class="bg-slate-50 rounded-lg p-3 border border-slate-200/70 space-y-1.5 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-slate-700">Mandate Status: ${inv.p2p.mandate.status}</span>
+                <span class="font-semibold text-brand-blue">Pulled: ${formatINR(inv.p2p.mandate.pulledTotal)}</span>
+              </div>
+              <div class="text-[11px] text-slate-500">
+                ${getPeriodLabel()} Flow: Fresh ${formatINR(p2pFlow.fresh)} + Top-up ${formatINR(p2pFlow.topup)} + Pull ${formatINR(p2pFlow.mandatePull)} − Withdrawal ${formatINR(p2pFlow.withdrawal)}
+              </div>
+            </div>
+          ` : `<div class="text-xs text-slate-400">No active P2P Edge holdings</div>`}
+        </div>
+
+        <!-- Product 2: Estates (SPV/LLP Fractional Real Estate) -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span class="font-bold text-xs text-slate-900">Per Annum Estates (SPV/LLP)</span>
+            </div>
+            <span class="font-bold text-sm text-slate-900">${formatINR(inv.estates.capitalDeployed)}</span>
+          </div>
+          ${inv.estates.invested ? `
+            <div class="grid grid-cols-3 gap-2 mt-2.5 pt-2.5 border-t border-slate-100 text-xs">
+              <div><span class="text-slate-400 text-[10px] block">Capital Deployed</span><span class="font-semibold">${formatINR(inv.estates.capitalDeployed)}</span></div>
+              <div><span class="text-slate-400 text-[10px] block">Projected Exit Value</span><span class="font-semibold text-emerald-700">${formatINR(inv.estates.estExitValue)}</span></div>
+              <div><span class="text-slate-400 text-[10px] block">Target ROI</span><span class="font-semibold text-brand-blue">${inv.estates.targetRoiRange}</span></div>
+            </div>
+            <div class="mt-2.5 space-y-1.5">
+              ${inv.estates.properties.map(prop => `
+                <div class="bg-slate-50 px-3 py-2 rounded-lg text-xs space-y-0.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-800 font-semibold truncate pr-2">${prop.name}</span>
+                    <span class="font-bold text-slate-900 shrink-0">${formatINR(prop.amount)}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-[11px] text-slate-500">
+                    <span>Unit Ownership: <strong class="text-brand-blue">${prop.ownershipPct}</strong> • ${prop.paymentPlan}</span>
+                    <span>${prop.expectedTenure}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : `<div class="text-xs text-slate-400 mt-2">No active Estates allocations</div>`}
+        </div>
+
+        <!-- Product 3: NCDs -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+              <span class="font-bold text-xs text-slate-900">NCDs & Corporate Bonds</span>
+            </div>
+            <span class="font-bold text-sm text-slate-900">${formatINR(inv.ncd.amountInvested)}</span>
+          </div>
+          ${inv.ncd.invested ? `
+            <div class="grid grid-cols-3 gap-2 mt-2.5 pt-2.5 border-t border-slate-100 text-xs">
+              <div><span class="text-slate-400 text-[10px] block">Amount Invested</span><span class="font-semibold">${formatINR(inv.ncd.amountInvested)}</span></div>
+              <div><span class="text-slate-400 text-[10px] block">Net Received (Post-TDS)</span><span class="font-semibold text-emerald-700">+${formatINR(inv.ncd.netPayoutsReceived)}</span></div>
+              <div><span class="text-slate-400 text-[10px] block">XIRR (Pre-Tax)</span><span class="font-semibold text-brand-blue">${inv.ncd.xirrPreTax}% p.a.</span></div>
+            </div>
+            <div class="mt-2.5 space-y-1.5">
+              ${inv.ncd.holdings.map(b => `
+                <div class="bg-slate-50 px-3 py-2 rounded-lg text-xs space-y-0.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-800 font-semibold truncate pr-2">${b.name}</span>
+                    <span class="font-bold text-slate-900 shrink-0">${formatINR(b.amount)}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-[11px] text-slate-500">
+                    <span>Issuer: ${b.issuer} • Coupon: ${b.couponRate}</span>
+                    <span>Maturity: ${b.maturity}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : `<div class="text-xs text-slate-400 mt-2">No active NCD holdings</div>`}
+        </div>
+      `;
+
+      document.getElementById('drawerBackdrop').classList.remove('hidden');
+      document.getElementById('investorDrawer').classList.remove('translate-x-full');
+      lucide.createIcons();
+    }
+
+    function closeInvestorDrawer() {
+      document.getElementById('drawerBackdrop').classList.add('hidden');
+      document.getElementById('investorDrawer').classList.add('translate-x-full');
+    }
+
+    // Download Current Product Table List as CSV
+    function downloadCurrentTableCSV() {
+      const list = getFilteredInvestors();
+      const pLabel = getPeriodLabel();
+      let headers = [];
+      let rows = [];
+
+      if (currentTab === 'ALL') {
+        headers = ['User ID', 'Investor Name', 'Phone', 'Products', `Total Deposits (${pLabel})`, 'Current Value', 'Net Returns'];
+        rows = list.map(i => {
+          const prods = [
+            i.p2p.invested ? 'P2P Edge' : '',
+            i.estates.invested ? 'Estates' : '',
+            i.ncd.invested ? 'NCDs' : ''
+          ].filter(Boolean).join(' + ') || 'None';
+          return [i.userId, `"${i.name}"`, `"${i.phone}"`, `"${prods}"`, getAllProductsDeposits(i), getInvestorActiveValue(i), getInvestorRealisedReturns(i)];
+        });
+      } else if (currentTab === 'P2P') {
+        headers = ['User ID', 'Investor Name', `${pLabel} Net Deposit`, 'Current Value', 'Net Repaid to Bank', 'Net Returns', 'XIRR (%)', 'Mandate Status', 'Pulled via Mandate (Total)'];
+        rows = list.map(i => [
+          i.userId, `"${i.name}"`, getP2PNetDeposit(i), i.p2p.currentValue, i.p2p.netRepaidToBank, i.p2p.netReturns, i.p2p.xirr, i.p2p.mandate.status, i.p2p.mandate.pulledTotal
+        ]);
+      } else if (currentTab === 'ESTATES') {
+        headers = ['User ID', 'Investor Name', 'Capital Deployed', 'Primary Property', 'Unit Ownership %', 'Payment Plan', 'Target ROI', 'Projected/Exit Value', 'Deal Status'];
+        rows = list.map(i => {
+          const p = i.estates.properties[0] || {};
+          return [
+            i.userId, `"${i.name}"`, i.estates.capitalDeployed, `"${p.name || '-'}"`, p.ownershipPct || '-', `"${p.paymentPlan || '-'}"`, i.estates.targetRoiRange, i.estates.estExitValue, `"${i.estates.dealStatus}"`
+          ];
+        });
+      } else if (currentTab === 'NCD') {
+        headers = ['User ID', 'Investor Name', 'NCD Series', 'Issuer', 'Amount Invested', 'Net Received (Post-TDS)', 'XIRR Pre-Tax (%)', 'Next Payout Date', 'Maturity Date'];
+        rows = list.map(i => {
+          const b = i.ncd.holdings[0] || {};
+          return [
+            i.userId, `"${i.name}"`, `"${b.name || '-'}"`, `"${b.issuer || '-'}"`, i.ncd.amountInvested, i.ncd.netPayoutsReceived, i.ncd.xirrPreTax, i.ncd.nextPayoutDate, i.ncd.maturityDate
+          ];
+        });
+      }
+
+      const csvContent = "data:text/csv;charset=utf-8,"
+        + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `PerAnnum_IFA_${currentTab}_${pLabel.replace(/\s+/g, '')}_List.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      openToast(`Downloaded ${currentTab} list (${list.length} investors)`);
+    }
+
+    // Toast Helper
+    let toastTimer;
+    function openToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      setupTabControls();
+      renderDashboard();
+    });
+  </script>
+</body>
+</html>
