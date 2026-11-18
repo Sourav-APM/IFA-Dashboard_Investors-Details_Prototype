@@ -283,12 +283,6 @@
           </div>
 
           <div class="flex items-center justify-end gap-2">
-            <!-- Mobile Quick Sort Toggle for Withdrawals (only visible on mobile under P2P) -->
-            <button type="button" id="mobileWithdrawalsSortBtn" onclick="toggleWithdrawalsSort()" class="md:hidden px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-medium text-xs flex items-center gap-1">
-              <span>Withdrawals</span>
-              <span id="mobileSortArrow" class="text-brand-blue font-bold">↑</span>
-            </button>
-
             <button onclick="downloadCurrentTableCSV()" class="px-3.5 py-1.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-medium text-xs flex items-center gap-1.5 shadow-2xs transition">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
               <span id="downloadBtnLabel">Download P2P Edge List</span>
@@ -343,11 +337,6 @@
 
   <!-- DATA & APPLICATION LOGIC -->
   <script>
-    // Accounting-consistent dataset:
-    // - Deposit = Fresh + Top-ups
-    // - Repayments = Principal received + Interest received - Fees
-    // - Pulled Via Mandate <= Repayments (pulled from repayments)
-    // - Withdrawals = Repayments - Pulled Via Mandate (net repayments sent to investor's bank account)
     const investorsData = [
       {
         userId: "1028491",
@@ -365,9 +354,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 10400000, totalInvestorShare: 500000 },
-            "30D":{ totalUnitCost: 10400000, totalInvestorShare: 500000 },
-            ALL:  { totalUnitCost: 31200000, totalInvestorShare: 1500000 }
+            MTD:  { totalUnitCost: 10400000, totalUnitsAllocated: 5, totalInvestorShare: 500000 },
+            "30D":{ totalUnitCost: 10400000, totalUnitsAllocated: 5, totalInvestorShare: 500000 },
+            ALL:  { totalUnitCost: 31200000, totalUnitsAllocated: 15, totalInvestorShare: 1500000 }
           }
         },
         ncd: {
@@ -395,9 +384,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 20800000, totalInvestorShare: 1000000 },
-            "30D":{ totalUnitCost: 20800000, totalInvestorShare: 1000000 },
-            ALL:  { totalUnitCost: 20800000, totalInvestorShare: 1000000 }
+            MTD:  { totalUnitCost: 20800000, totalUnitsAllocated: 10, totalInvestorShare: 1000000 },
+            "30D":{ totalUnitCost: 20800000, totalUnitsAllocated: 10, totalInvestorShare: 1000000 },
+            ALL:  { totalUnitCost: 20800000, totalUnitsAllocated: 10, totalInvestorShare: 1000000 }
           }
         },
         ncd: {
@@ -425,9 +414,9 @@
         estates: {
           invested: false,
           periods: {
-            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 0, totalInvestorShare: 0 }
+            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 }
           }
         },
         ncd: {
@@ -455,9 +444,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 20775000, totalInvestorShare: 750000 },
-            ALL:  { totalUnitCost: 20775000, totalInvestorShare: 750000 }
+            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 20775000, totalUnitsAllocated: 8, totalInvestorShare: 750000 },
+            ALL:  { totalUnitCost: 20775000, totalUnitsAllocated: 8, totalInvestorShare: 750000 }
           }
         },
         ncd: {
@@ -485,9 +474,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 20780000, totalInvestorShare: 800000 }
+            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 20780000, totalUnitsAllocated: 8, totalInvestorShare: 800000 }
           }
         },
         ncd: {
@@ -515,9 +504,9 @@
         estates: {
           invested: false,
           periods: {
-            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 0, totalInvestorShare: 0 }
+            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 }
           }
         },
         ncd: {
@@ -545,9 +534,9 @@
         estates: {
           invested: false,
           periods: {
-            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 0, totalInvestorShare: 0 }
+            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 }
           }
         },
         ncd: {
@@ -586,10 +575,6 @@
       return `₹ ${safeVal.toLocaleString('en-IN')}`;
     }
 
-    // P2P Period Metrics:
-    // - Deposit = Fresh + Top-ups
-    // - Pulled Via Mandate = pulled from repayments (bounded by repayments)
-    // - Withdrawals = total repayments (principal + interest - fees) sent to investor's bank account (Repayments - Pulled Via Mandate)
     function getP2PPeriodMetrics(inv) {
       const pData = inv.p2p.periods[currentPeriod];
       const deposit = Math.max(0, pData.fresh + pData.topup);
@@ -612,6 +597,7 @@
         : 0;
       return {
         totalUnitCost: eData.totalUnitCost,
+        totalUnitsAllocated: eData.totalUnitsAllocated,
         totalInvestorShare: eData.totalInvestorShare,
         totalSharePercentage: sharePct
       };
@@ -634,10 +620,6 @@
 
     function toggleWithdrawalsSort() {
       withdrawalsSortDir = withdrawalsSortDir === 'desc' ? 'asc' : 'desc';
-      const mobileArrow = document.getElementById('mobileSortArrow');
-      if (mobileArrow) {
-        mobileArrow.textContent = withdrawalsSortDir === 'desc' ? '↑' : '↓';
-      }
       renderTable();
     }
 
@@ -673,11 +655,6 @@
         NCD: 'Download NCDs List'
       };
       document.getElementById('downloadBtnLabel').textContent = downloadLabels[tab];
-
-      const mobileSortBtn = document.getElementById('mobileWithdrawalsSortBtn');
-      if (mobileSortBtn) {
-        mobileSortBtn.style.display = tab === 'P2P' ? 'flex' : 'none';
-      }
 
       renderDashboard();
     }
@@ -731,7 +708,6 @@
         const totalWithdrawals = list.reduce((s, i) => s + getP2PPeriodMetrics(i).withdrawals, 0);
         const totalPulled = list.reduce((s, i) => s + getP2PPeriodMetrics(i).pulledViaMandate, 0);
 
-        // Order: Current Value -> Deposit -> Withdrawals -> Pulled Via Mandate (Withdrawals before Pulled Via Mandate)
         strip.innerHTML = `
           <div class="hero-card-gradient text-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
             <span class="text-xs text-blue-200 font-medium">P2P Current Value</span>
@@ -859,6 +835,7 @@
       const mobileList = document.getElementById('mobileCardList');
       const emptyState = document.getElementById('emptyState');
       const footerNote = document.getElementById('footerFormulaNote');
+      const tableFooter = document.getElementById('tableFooter');
 
       if (list.length === 0) {
         thead.innerHTML = '';
@@ -866,13 +843,14 @@
         mobileList.innerHTML = '';
         emptyState.classList.remove('hidden');
         footerNote.innerHTML = '';
+        tableFooter.classList.add('hidden');
         return;
       }
       emptyState.classList.add('hidden');
 
-      // 1. P2P EDGE TABLE
-      // Exact columns in order: User ID, Investor Name, Deposit, Withdrawals ↑, Pulled Via Mandate, Current Value, On Demand Mandate
+      // 1. P2P EDGE TABLE (Strictly unchanged)
       if (currentTab === 'P2P') {
+        tableFooter.classList.remove('hidden');
         footerNote.innerHTML = `
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span><strong>Product Scope:</strong> P2P Edge combines both Growth and Monthly EMI plans.</span>
@@ -883,7 +861,6 @@
           </div>
         `;
 
-        // Default is high-to-low ('desc' -> shows ↑), clicking toggles to low-to-high ('asc' -> shows ↓)
         const sortArrow = withdrawalsSortDir === 'desc'
           ? '<span class="text-brand-blue font-bold ml-1">↑</span>'
           : '<span class="text-brand-blue font-bold ml-1">↓</span>';
@@ -969,7 +946,9 @@
       }
 
       // 2. ESTATES TABLE
+      // Columns: User ID, Investor Name, Total Unit Cost, Total Units Allocated, Total Investor Share, Total Share Percentage (Action column removed)
       else if (currentTab === 'ESTATES') {
+        tableFooter.classList.add('hidden');
         footerNote.innerHTML = '';
 
         thead.innerHTML = `
@@ -977,9 +956,9 @@
             <th class="py-3 pl-4 pr-3 w-[12%]">User ID</th>
             <th class="py-3 px-3 w-[23%]">Investor Name</th>
             <th class="py-3 px-3 text-right w-[17%]">Total Unit Cost</th>
+            <th class="py-3 px-3 text-right w-[16%]">Total Units Allocated</th>
             <th class="py-3 px-3 text-right w-[17%]">Total Investor Share</th>
-            <th class="py-3 px-3 text-right w-[15%]">Total Share Percentage</th>
-            <th class="py-3 pl-3 pr-4 text-right w-[16%]">Action</th>
+            <th class="py-3 pl-3 pr-4 text-right w-[15%]">Total Share Percentage</th>
           </tr>
         `;
 
@@ -993,15 +972,10 @@
                 <a href="javascript:void(0)" class="font-semibold text-brand-blue hover:underline cursor-pointer block truncate" title="${inv.name}">${inv.name}</a>
               </td>
               <td class="py-3 px-3 text-right font-medium text-slate-700 whitespace-nowrap">${formatINR(m.totalUnitCost)}</td>
+              <td class="py-3 px-3 text-right font-semibold text-slate-800 whitespace-nowrap">${m.totalUnitsAllocated.toLocaleString('en-IN')}</td>
               <td class="py-3 px-3 text-right font-bold text-slate-900 whitespace-nowrap">${formatINR(m.totalInvestorShare)}</td>
-              <td class="py-3 px-3 text-right whitespace-nowrap">
-                <span class="inline-block px-2.5 py-0.5 rounded bg-blue-50 text-brand-blue font-semibold text-xs">${m.totalSharePercentage.toFixed(2)}%</span>
-              </td>
               <td class="py-3 pl-3 pr-4 text-right whitespace-nowrap">
-                <button type="button" onclick="downloadInvestorReport('${inv.userId}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 bg-white hover:bg-blue-50 hover:border-blue-200 text-[11px] font-medium text-brand-blue transition">
-                  <i data-lucide="download" class="w-3 h-3"></i>
-                  <span>Download Report</span>
-                </button>
+                <span class="inline-block px-2.5 py-0.5 rounded bg-blue-50 text-brand-blue font-semibold text-xs">${m.totalSharePercentage.toFixed(2)}%</span>
               </td>
             </tr>
           `;
@@ -1011,27 +985,25 @@
           const m = getEstatesPeriodMetrics(inv);
           return `
             <div class="p-4 space-y-3 bg-white">
-              <div class="flex items-start justify-between gap-2">
-                <div>
-                  <a href="javascript:void(0)" class="font-semibold text-sm text-brand-blue hover:underline">${inv.name}</a>
-                  <div class="text-[11px] font-mono text-slate-400 mt-0.5">ID: ${inv.userId}</div>
-                </div>
-                <button type="button" onclick="downloadInvestorReport('${inv.userId}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-medium text-brand-blue">
-                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                  <span>Download Report</span>
-                </button>
+              <div>
+                <a href="javascript:void(0)" class="font-semibold text-sm text-brand-blue hover:underline">${inv.name}</a>
+                <div class="text-[11px] font-mono text-slate-400 mt-0.5">ID: ${inv.userId}</div>
               </div>
-              <div class="grid grid-cols-3 gap-2 bg-slate-50/80 p-3 rounded-lg border border-slate-100 text-xs tabular-nums">
+              <div class="grid grid-cols-2 gap-2.5 bg-slate-50/80 p-3 rounded-lg border border-slate-100 text-xs tabular-nums">
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Unit Cost</span>
+                  <span class="text-[10px] text-slate-400 block">Total Unit Cost</span>
                   <span class="font-medium text-slate-700">${formatINR(m.totalUnitCost, true)}</span>
                 </div>
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Investor Share</span>
+                  <span class="text-[10px] text-slate-400 block">Total Units Allocated</span>
+                  <span class="font-semibold text-slate-800">${m.totalUnitsAllocated.toLocaleString('en-IN')}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">Total Investor Share</span>
                   <span class="font-bold text-slate-900">${formatINR(m.totalInvestorShare, true)}</span>
                 </div>
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Share %</span>
+                  <span class="text-[10px] text-slate-400 block">Total Share Percentage</span>
                   <span class="font-semibold text-brand-blue">${m.totalSharePercentage.toFixed(2)}%</span>
                 </div>
               </div>
@@ -1042,6 +1014,7 @@
 
       // 3. NCDs TABLE
       else if (currentTab === 'NCD') {
+        tableFooter.classList.remove('hidden');
         footerNote.textContent = 'Net Payouts Received are post 10% TDS on the interest component. Full principal is returned on Maturity Date.';
 
         thead.innerHTML = `
@@ -1133,11 +1106,7 @@
       let headers = [];
       let row = [];
 
-      if (currentTab === 'ESTATES') {
-        const m = getEstatesPeriodMetrics(inv);
-        headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Investor Share', 'Total Share Percentage'];
-        row = [inv.userId, `"${inv.name}"`, m.totalUnitCost, m.totalInvestorShare, `${m.totalSharePercentage.toFixed(2)}%`];
-      } else if (currentTab === 'NCD') {
+      if (currentTab === 'NCD') {
         const m = getNCDPeriodMetrics(inv);
         headers = ['User ID', 'Investor Name', 'Amount Invested', 'Net Received (Post-TDS)', 'XIRR (Pre-Tax)'];
         row = [inv.userId, `"${inv.name}"`, m.amountInvested, m.netPayoutsReceived, `${m.xirrPreTax}%`];
@@ -1167,10 +1136,10 @@
           return [i.userId, `"${i.name}"`, m.deposit, m.withdrawals, m.pulledViaMandate, m.currentValue, m.mandateActive ? 'Pull Now' : 'Create Now'];
         });
       } else if (currentTab === 'ESTATES') {
-        headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Investor Share', 'Total Share Percentage'];
+        headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Units Allocated', 'Total Investor Share', 'Total Share Percentage'];
         rows = list.map(i => {
           const m = getEstatesPeriodMetrics(i);
-          return [i.userId, `"${i.name}"`, m.totalUnitCost, m.totalInvestorShare, `${m.totalSharePercentage.toFixed(2)}%`];
+          return [i.userId, `"${i.name}"`, m.totalUnitCost, m.totalUnitsAllocated, m.totalInvestorShare, `${m.totalSharePercentage.toFixed(2)}%`];
         });
       } else if (currentTab === 'NCD') {
         headers = ['User ID', 'Investor Name', 'Amount Invested', 'Net Received (Post-TDS)', 'XIRR (Pre-Tax)'];
