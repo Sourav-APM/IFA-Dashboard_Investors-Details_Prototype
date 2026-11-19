@@ -354,9 +354,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 10400000, totalUnitsAllocated: 5, totalInvestorShare: 500000 },
-            "30D":{ totalUnitCost: 10400000, totalUnitsAllocated: 5, totalInvestorShare: 500000 },
-            ALL:  { totalUnitCost: 31200000, totalUnitsAllocated: 15, totalInvestorShare: 1500000 }
+            MTD:  { totalUnitCost: 10400000, totalInvestorShare: 500000 },
+            "30D":{ totalUnitCost: 10400000, totalInvestorShare: 500000 },
+            ALL:  { totalUnitCost: 31200000, totalInvestorShare: 1500000 }
           }
         },
         ncd: {
@@ -384,9 +384,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 20800000, totalUnitsAllocated: 10, totalInvestorShare: 1000000 },
-            "30D":{ totalUnitCost: 20800000, totalUnitsAllocated: 10, totalInvestorShare: 1000000 },
-            ALL:  { totalUnitCost: 20800000, totalUnitsAllocated: 10, totalInvestorShare: 1000000 }
+            MTD:  { totalUnitCost: 20800000, totalInvestorShare: 1000000 },
+            "30D":{ totalUnitCost: 20800000, totalInvestorShare: 1000000 },
+            ALL:  { totalUnitCost: 20800000, totalInvestorShare: 1000000 }
           }
         },
         ncd: {
@@ -414,9 +414,9 @@
         estates: {
           invested: false,
           periods: {
-            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 }
+            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 0, totalInvestorShare: 0 }
           }
         },
         ncd: {
@@ -444,9 +444,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 20775000, totalUnitsAllocated: 8, totalInvestorShare: 750000 },
-            ALL:  { totalUnitCost: 20775000, totalUnitsAllocated: 8, totalInvestorShare: 750000 }
+            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 20775000, totalInvestorShare: 750000 },
+            ALL:  { totalUnitCost: 20775000, totalInvestorShare: 750000 }
           }
         },
         ncd: {
@@ -474,9 +474,9 @@
         estates: {
           invested: true,
           periods: {
-            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 20780000, totalUnitsAllocated: 8, totalInvestorShare: 800000 }
+            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 20780000, totalInvestorShare: 800000 }
           }
         },
         ncd: {
@@ -504,9 +504,9 @@
         estates: {
           invested: false,
           periods: {
-            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 }
+            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 0, totalInvestorShare: 0 }
           }
         },
         ncd: {
@@ -534,9 +534,9 @@
         estates: {
           invested: false,
           periods: {
-            MTD:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            "30D":{ totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 },
-            ALL:  { totalUnitCost: 0, totalUnitsAllocated: 0, totalInvestorShare: 0 }
+            MTD:  { totalUnitCost: 0, totalInvestorShare: 0 },
+            "30D":{ totalUnitCost: 0, totalInvestorShare: 0 },
+            ALL:  { totalUnitCost: 0, totalInvestorShare: 0 }
           }
         },
         ncd: {
@@ -597,7 +597,6 @@
         : 0;
       return {
         totalUnitCost: eData.totalUnitCost,
-        totalUnitsAllocated: eData.totalUnitsAllocated,
         totalInvestorShare: eData.totalInvestorShare,
         totalSharePercentage: sharePct
       };
@@ -946,19 +945,18 @@
       }
 
       // 2. ESTATES TABLE
-      // Columns: User ID, Investor Name, Total Unit Cost, Total Units Allocated, Total Investor Share, Total Share Percentage (Action column removed)
+      // Columns: User ID, Investor Name, Total Unit Cost, Total Investor Share, Total Share Percentage ("Total Units Allocated" removed)
       else if (currentTab === 'ESTATES') {
         tableFooter.classList.add('hidden');
         footerNote.innerHTML = '';
 
         thead.innerHTML = `
           <tr>
-            <th class="py-3 pl-4 pr-3 w-[12%]">User ID</th>
-            <th class="py-3 px-3 w-[23%]">Investor Name</th>
-            <th class="py-3 px-3 text-right w-[17%]">Total Unit Cost</th>
-            <th class="py-3 px-3 text-right w-[16%]">Total Units Allocated</th>
-            <th class="py-3 px-3 text-right w-[17%]">Total Investor Share</th>
-            <th class="py-3 pl-3 pr-4 text-right w-[15%]">Total Share Percentage</th>
+            <th class="py-3 pl-4 pr-3 w-[14%]">User ID</th>
+            <th class="py-3 px-3 w-[26%]">Investor Name</th>
+            <th class="py-3 px-3 text-right w-[20%]">Total Unit Cost</th>
+            <th class="py-3 px-3 text-right w-[20%]">Total Investor Share</th>
+            <th class="py-3 pl-3 pr-4 text-right w-[20%]">Total Share Percentage</th>
           </tr>
         `;
 
@@ -972,7 +970,6 @@
                 <a href="javascript:void(0)" class="font-semibold text-brand-blue hover:underline cursor-pointer block truncate" title="${inv.name}">${inv.name}</a>
               </td>
               <td class="py-3 px-3 text-right font-medium text-slate-700 whitespace-nowrap">${formatINR(m.totalUnitCost)}</td>
-              <td class="py-3 px-3 text-right font-semibold text-slate-800 whitespace-nowrap">${m.totalUnitsAllocated.toLocaleString('en-IN')}</td>
               <td class="py-3 px-3 text-right font-bold text-slate-900 whitespace-nowrap">${formatINR(m.totalInvestorShare)}</td>
               <td class="py-3 pl-3 pr-4 text-right whitespace-nowrap">
                 <span class="inline-block px-2.5 py-0.5 rounded bg-blue-50 text-brand-blue font-semibold text-xs">${m.totalSharePercentage.toFixed(2)}%</span>
@@ -989,21 +986,17 @@
                 <a href="javascript:void(0)" class="font-semibold text-sm text-brand-blue hover:underline">${inv.name}</a>
                 <div class="text-[11px] font-mono text-slate-400 mt-0.5">ID: ${inv.userId}</div>
               </div>
-              <div class="grid grid-cols-2 gap-2.5 bg-slate-50/80 p-3 rounded-lg border border-slate-100 text-xs tabular-nums">
+              <div class="grid grid-cols-3 gap-2 bg-slate-50/80 p-3 rounded-lg border border-slate-100 text-xs tabular-nums">
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Total Unit Cost</span>
+                  <span class="text-[10px] text-slate-400 block">Unit Cost</span>
                   <span class="font-medium text-slate-700">${formatINR(m.totalUnitCost, true)}</span>
                 </div>
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Total Units Allocated</span>
-                  <span class="font-semibold text-slate-800">${m.totalUnitsAllocated.toLocaleString('en-IN')}</span>
-                </div>
-                <div>
-                  <span class="text-[10px] text-slate-400 block">Total Investor Share</span>
+                  <span class="text-[10px] text-slate-400 block">Investor Share</span>
                   <span class="font-bold text-slate-900">${formatINR(m.totalInvestorShare, true)}</span>
                 </div>
                 <div>
-                  <span class="text-[10px] text-slate-400 block">Total Share Percentage</span>
+                  <span class="text-[10px] text-slate-400 block">Share %</span>
                   <span class="font-semibold text-brand-blue">${m.totalSharePercentage.toFixed(2)}%</span>
                 </div>
               </div>
@@ -1136,10 +1129,10 @@
           return [i.userId, `"${i.name}"`, m.deposit, m.withdrawals, m.pulledViaMandate, m.currentValue, m.mandateActive ? 'Pull Now' : 'Create Now'];
         });
       } else if (currentTab === 'ESTATES') {
-        headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Units Allocated', 'Total Investor Share', 'Total Share Percentage'];
+        headers = ['User ID', 'Investor Name', 'Total Unit Cost', 'Total Investor Share', 'Total Share Percentage'];
         rows = list.map(i => {
           const m = getEstatesPeriodMetrics(i);
-          return [i.userId, `"${i.name}"`, m.totalUnitCost, m.totalUnitsAllocated, m.totalInvestorShare, `${m.totalSharePercentage.toFixed(2)}%`];
+          return [i.userId, `"${i.name}"`, m.totalUnitCost, m.totalInvestorShare, `${m.totalSharePercentage.toFixed(2)}%`];
         });
       } else if (currentTab === 'NCD') {
         headers = ['User ID', 'Investor Name', 'Amount Invested', 'Net Received (Post-TDS)', 'XIRR (Pre-Tax)'];
